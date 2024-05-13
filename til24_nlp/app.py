@@ -7,6 +7,9 @@ import sys
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
+from .nlp import nlp_magic
+from .structs import ExtractRequest
+
 __all__ = ["app"]
 
 load_dotenv()
@@ -43,3 +46,24 @@ async def hello():
 async def health():
     """Competition admin needs this."""
     return {"message": "health ok"}
+
+
+@app.post("/extract")
+async def extract(req: ExtractRequest):
+    """Performs QA extraction given a context string.
+
+    returns a dictionary with fields:
+
+    {
+        "heading": str,
+        "target": str,
+        "tool": str,
+    }
+    """
+    preds = []
+    for instance in req.instances:
+        in_text = instance.transcript
+        out_data = nlp_magic(in_text)
+        preds.append(out_data)
+
+    return {"predictions": preds}

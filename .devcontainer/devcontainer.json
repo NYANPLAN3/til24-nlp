@@ -39,6 +39,11 @@
       "type": "volume",
       "source": "apt-cache",
       "target": "/var/cache/apt"
+    },
+    {
+      "type": "volume",
+      "source": "ollama-cache",
+      "target": "/home/vscode/.ollama"
     }
   ],
 

@@ -6,18 +6,23 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "<3.13,>=3.8"
+python = "<3.13,>=3.9"
 rich = "^13.7.1"
 fastapi = { extras = ["all"], version = "^0.111.0" }
 python-dotenv = "^1.0.1"
+instructor = "^1.2.6"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"
 poethepoet = "*"
+rouge-score = "^0.1.2"
+pandas = "^2.2.2"
+requests = "^2.31.0"
 
 [tool.poe.tasks]
 dev = "python dev.py"
 prod = "fastapi run til24_nlp --proxy-headers --port 5002"
+test = "python eval/test_nlp.py"
 
 [tool.ruff.lint]
 select = ["D"]
