@@ -1,4 +1,4 @@
-# py-api-template
+# til24-nlp
 
 Template for FastAPI-based API server. Features:
 
@@ -11,11 +11,6 @@ Template for FastAPI-based API server. Features:
 Oh yeah, this template should work with the fancy "Dev Containers: Clone Repository
 in Container Volume..." feature.
 
-## Usage Instructions
-
-- Replace all instances of `py-api-template` & `py_api_template`.
-  - Tip: Rename the `py_api_template` folder first for auto-refactoring.
-
 ## Useful Commands
 
 ```sh
@@ -24,8 +19,8 @@ poe prod # Launch "production" server.
 poe dev # Launch debugging server, use VSCode's debug task instead by pressing F5.
 
 # Building docker image for deployment.
-docker build -f Dockerfile . -t example
+docker build -f Dockerfile . -t nyanplan3-nlp:latest -t nyanplan3-nlp:0.1.0
 
-# Running FastAPI app (with GPU),
-docker run --rm --gpus all -p 3000:3000 example
+# Running FastAPI app (with GPU).
+docker run --rm --gpus all -p 5002:5002 nyanplan3-nlp
 ```

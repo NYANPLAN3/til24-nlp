@@ -19,9 +19,9 @@ def create_debug_app():
             )
         ],
     )
-    logging.getLogger("py_api_template").setLevel(logging.DEBUG)
+    logging.getLogger("til24_nlp").setLevel(logging.DEBUG)
 
-    from py_api_template import app
+    from til24_nlp import app
 
     return app
 

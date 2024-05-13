@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "py-api-template"
+name = "til24-nlp"
 version = "0.1.0"
 description = "template for python api server"
 authors = ["Your Name <you@example.com>"]
@@ -17,7 +17,7 @@ poethepoet = "*"
 
 [tool.poe.tasks]
 dev = "python dev.py"
-prod = "fastapi run py_api_template --proxy-headers --port 3000"
+prod = "fastapi run til24_nlp --proxy-headers --port 5002"
 
 [tool.ruff.lint]
 select = ["D"]
