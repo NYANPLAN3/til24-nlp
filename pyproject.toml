@@ -21,8 +21,12 @@ requests = "^2.31.0"
 
 [tool.poe.tasks]
 dev = "python dev.py"
-prod = "fastapi run til24_nlp --proxy-headers --port 5002"
+prod = "docker run --rm --gpus all -p 5002:5002 nyanplan3-nlp"
 test = "python eval/test_nlp.py"
+
+[tool.poe.tasks.build]
+cmd = "docker build -f Dockerfile . -t nyanplan3-nlp:latest -t nyanplan3-nlp:${tag}"
+args = [{ name = "tag", positional = true, required = true }]
 
 [tool.ruff.lint]
 select = ["D"]
