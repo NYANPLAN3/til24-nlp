@@ -11,7 +11,6 @@ log = logging.getLogger(__name__)
 
 
 class Character(BaseModel):
-    """ddd."""
 
     tool: str
     target: str
@@ -30,7 +29,8 @@ client = instructor.from_openai(
 def nlp_magic(sentence: str):
     # enables `response_model` in create call
     # initialised
-
+    
+    
     starttime = time.time()
     try:
         resp = client.chat.completions.create(
@@ -38,11 +38,16 @@ def nlp_magic(sentence: str):
             messages=[
                 {
                     "role": "system",
-                    "content": """tyou are used for function calling to catergorize a natural language prompt into the form
-                    tool: str,
-                    heading: int,
-                    target: str
-                    headings are integers. if a number is given, turn it into an integer
+                    "content": """
+                    given a transcript, you will extract these 3 things: 
+
+                    1.tools are weapons. some tools are electromagnetic pulse, surface-to-air missiles, EMP, machine gun, anti-air artillery, interceptor jets, 
+                    drone catcher. if none found, infer from the sentence.
+
+                    2.targets are objects with description.
+
+                    3.headings integers compass direction. if there is more than one number,only return the one that 
+                    describes direction.
                     """,
                 },
                 {
@@ -55,6 +60,8 @@ def nlp_magic(sentence: str):
     except Exception:
         log.error(f'"{sentence}" failed.')
         return Character(tool="", target="", heading=0)
+    
+
 
     endtime = time.time()
     time_taken = endtime - starttime
@@ -64,9 +71,29 @@ def nlp_magic(sentence: str):
 
 
 if __name__ == "__main__":
-    sentence = (
-        "Bravo, engage with machine gun, heading two three zero, target black drone."
-    )
-    ouput = nlp_magic(sentence)
+    import pandas as pd
+    import csv
 
-    print(ouput)
+
+    df = pd.read_csv('data.csv')
+    transcript_list = df['transcript'].tolist()
+
+    
+
+    output_list = []
+    failed_list = []
+    counter=1
+    list_size = len(transcript_list)
+    for transcript in transcript_list:
+        ouput = nlp_magic(transcript).model_dump()
+        print(f"{ouput}........{counter}/{list_size} Done")
+        output_list.append(ouput)
+        counter += 1
+        
+
+
+        if ouput == {'tool': '', 'target': '', 'heading': 0}:
+            failed_list.append(transcript)
+            with open("mycsvfile.csv", "w", newline="") as f:
+                w = csv.writer(f)
+                w.writerow(failed_list)
