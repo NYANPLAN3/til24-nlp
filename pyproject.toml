@@ -12,9 +12,15 @@ fastapi = { extras = ["all"], version = "^0.111.0" }
 python-dotenv = "^1.0.1"
 instructor = "^1.2.6"
 llama-cpp-python = [
-  { version = "^0.2.74", source = "llama-cpp-python-cuda", markers = "sys_platform == 'win32' or sys_platform == 'linux'" },
-  { version = "^0.2.74", source = "llama-cpp-python-metal", markers = "sys_platform == 'darwin'" },
+  { version = "^0.2.74", extras = [
+    "server",
+  ], source = "llama-cpp-python-cuda", markers = "sys_platform == 'win32' or sys_platform == 'linux'" },
+  { version = "^0.2.74", extras = [
+    "server",
+  ], source = "llama-cpp-python-metal", markers = "sys_platform == 'darwin'" },
 ]
+nvidia-cuda-runtime-cu12 = { version = "^12.4.127", markers = "sys_platform == 'linux'" }
+nvidia-cublas-cu12 = { version = "^12.4.5.8", markers = "sys_platform == 'linux'" }
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"

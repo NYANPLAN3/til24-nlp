@@ -20,8 +20,8 @@ class Character(BaseModel):
 
 client = instructor.from_openai(
     OpenAI(
-        base_url="http://localhost:11434/v1",
-        api_key="ollama",  # required, but unused
+        base_url="http://localhost:5002/llama-cpp-python/v1",
+        api_key="localhost",
     ),
     mode=instructor.Mode.JSON,
 )
@@ -51,9 +51,10 @@ def nlp_magic(sentence: str):
                 },
             ],
             response_model=Character,
+            max_retries=1,
         )
-    except Exception:
-        log.error(f'"{sentence}" failed.')
+    except Exception as e:
+        log.error(f'"{sentence}" failed.', exc_info=e)
         return Character(tool="", target="", heading=0)
 
     endtime = time.time()

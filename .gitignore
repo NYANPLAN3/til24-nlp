@@ -161,5 +161,7 @@ cython_debug/
 #.idea/
 
 # others
+/models/*
+!/models/.keep
 /results
 /data

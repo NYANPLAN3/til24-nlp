@@ -6,7 +6,9 @@ import sys
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from llama_cpp.server.app import create_app
 
+from .defaults import DEFAULT_SERVER_CFG, PHI3_MODEL_CFG
 from .nlp import nlp_magic
 from .structs import ExtractRequest
 
@@ -17,6 +19,14 @@ load_dotenv()
 log = logging.getLogger(__name__)
 
 app = FastAPI()
+
+
+api_app = create_app(
+    server_settings=DEFAULT_SERVER_CFG,
+    model_settings=[PHI3_MODEL_CFG],
+)
+
+app.mount("/llama-cpp-python", api_app)
 
 
 @app.get("/hello")
