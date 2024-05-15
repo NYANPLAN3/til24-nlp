@@ -9,8 +9,4 @@ poetry install
 sudo chown -R vscode:vscode /home/vscode/.cache/pypoetry
 sudo chown -R vscode:vscode /home/vscode/.cache/gcsfuse
 
-sudo apt-get update && sudo apt-get install -y --no-install-recommends lshw
-curl -fsSL https://ollama.com/install.sh | sh
-sudo chown -R vscode:vscode /home/vscode/.ollama
-
 #/workspaces/til24-nlp/.devcontainer/hooks/setupGCS.sh

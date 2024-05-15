@@ -47,12 +47,7 @@
       "source": "til24-gcsfuse-cache",
       "target": "/home/vscode/.cache/gcsfuse"
     },
-    { "type": "bind", "source": "/dev/fuse", "target": "/dev/fuse" },
-    {
-      "type": "volume",
-      "source": "ollama-cache",
-      "target": "/home/vscode/.ollama"
-    }
+    { "type": "bind", "source": "/dev/fuse", "target": "/dev/fuse" }
   ],
 
   "privileged": true,
