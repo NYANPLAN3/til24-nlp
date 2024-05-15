@@ -320,6 +320,17 @@ files = [
 ]
 
 [[package]]
+name = "diskcache"
+version = "5.6.3"
+description = "Disk Cache -- Disk and file backed persistent cache."
+optional = false
+python-versions = ">=3"
+files = [
+    {file = "diskcache-5.6.3-py3-none-any.whl", hash = "sha256:5e31b2d5fbad117cc363ebaf6b689474db18a1f6438bc82358b024abd4c2ca19"},
+    {file = "diskcache-5.6.3.tar.gz", hash = "sha256:2c3a3fa2743d8535d832ec61c2054a1641f41775aa7c556758a109941e33e4fc"},
+]
+
+[[package]]
 name = "distro"
 version = "1.9.0"
 description = "Distro - an OS platform information API"
@@ -705,6 +716,97 @@ files = [
     {file = "joblib-1.4.2-py3-none-any.whl", hash = "sha256:06d478d5674cbc267e7496a410ee875abd68e4340feff4490bcb7afb88060ae6"},
     {file = "joblib-1.4.2.tar.gz", hash = "sha256:2382c5816b2636fbd20a09e0f4e9dad4736765fdfb7dca582943b9c1366b3f0e"},
 ]
+
+[[package]]
+name = "llama-cpp-python"
+version = "0.2.74"
+description = "Python bindings for the llama.cpp library"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-linux_x86_64.whl", hash = "sha256:39d34a7083b6a8275237e9aba131dad69e0fe7177971223ec650420d670c88c3"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-win_amd64.whl", hash = "sha256:afa87813ac020a5146f45b1a122a1e1b722a55beaa67ab55c0d1093f6b7b1996"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-linux_x86_64.whl", hash = "sha256:fd94637d61ec9739e520cffa594b1e8d8e6b646f10857e2916a510545b3c58b2"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-win_amd64.whl", hash = "sha256:47ebeb30875e5868a4ae1f3a36baa5c639790b9cff67d213792587a66b075b18"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-linux_x86_64.whl", hash = "sha256:f703ec6260a0a3e6497b8db5c683c236f8bbb4761ff232f8aeb466d575323b23"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-win_amd64.whl", hash = "sha256:81bfcdaaf24cf90f156054428109b3da225e4b97ade667ed9dc4c92ea2231f31"},
+]
+
+[package.dependencies]
+diskcache = ">=5.6.1"
+jinja2 = ">=2.11.3"
+numpy = ">=1.20.0"
+typing-extensions = ">=4.5.0"
+
+[package.extras]
+all = ["llama_cpp_python[dev,server,test]"]
+dev = ["black (>=23.3.0)", "httpx (>=0.24.1)", "mkdocs (>=1.4.3)", "mkdocs-material (>=9.1.18)", "mkdocstrings[python] (>=0.22.0)", "pytest (>=7.4.0)", "twine (>=4.0.2)"]
+server = ["PyYAML (>=5.1)", "fastapi (>=0.100.0)", "pydantic-settings (>=2.0.1)", "sse-starlette (>=1.6.1)", "starlette-context (>=0.3.6,<0.4)", "uvicorn (>=0.22.0)"]
+test = ["httpx (>=0.24.1)", "pytest (>=7.4.0)", "scipy (>=1.10)"]
+
+[package.source]
+type = "legacy"
+url = "https://abetlen.github.io/llama-cpp-python/whl/cu124"
+reference = "llama-cpp-python-cuda"
+
+[[package]]
+name = "llama-cpp-python"
+version = "0.2.74"
+description = "Python bindings for the llama.cpp library"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_11_0_aarch64.whl", hash = "sha256:7e446b415c2e07c364dba2791020733e346d0aa4dd59486f38ee1ee4db3931f3"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:7e446b415c2e07c364dba2791020733e346d0aa4dd59486f38ee1ee4db3931f3"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_11_0_x86_64.whl", hash = "sha256:4269a37d3663fd0c1742e173a4c2749f0ba997868f000f5a310c4ea2c152a8db"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_12_0_aarch64.whl", hash = "sha256:a6c81232f2fb1c8d7e866a2582eea99a6ba08709d4342888adc31f2a4f030080"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_12_0_arm64.whl", hash = "sha256:a6c81232f2fb1c8d7e866a2582eea99a6ba08709d4342888adc31f2a4f030080"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:48ff2a3ae7ddbe3bb333d1bbf8942517d11503438a0d8bee08d2cf87ea1ce74c"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_13_0_aarch64.whl", hash = "sha256:5666bb13b619b4468572032dc47300a5a2b29d99ac70dd0e2426c47f91295431"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:5666bb13b619b4468572032dc47300a5a2b29d99ac70dd0e2426c47f91295431"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_14_0_aarch64.whl", hash = "sha256:4d765e2f7be6a5575966046a347da6b833ccacb55842cf5c2e57c1f86c92be1f"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:4d765e2f7be6a5575966046a347da6b833ccacb55842cf5c2e57c1f86c92be1f"},
+    {file = "llama_cpp_python-0.2.74-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:b5fb7844c8ff11bc21c76b8e770c25c3571ac458232512ed08d2f7f2c45e0cbb"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_11_0_aarch64.whl", hash = "sha256:d481000949007ddd5e48c4cef28514511292ee09284e792df9a9876adfe5de9d"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:d481000949007ddd5e48c4cef28514511292ee09284e792df9a9876adfe5de9d"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_11_0_x86_64.whl", hash = "sha256:394b31529bb9ee47a2755c3108efac524987918f5340a3a528a0a7d7468f5ae9"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_12_0_aarch64.whl", hash = "sha256:b7a785bde212961601adc0f3ebc85ab024408230acc2678785b3dd85251a16f5"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:b7a785bde212961601adc0f3ebc85ab024408230acc2678785b3dd85251a16f5"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_12_0_x86_64.whl", hash = "sha256:0f90d404562473f8c266ef6129700b0b60aa1a53bda5af0990c79413e868b79f"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_13_0_aarch64.whl", hash = "sha256:a590153272448ee7823a8b55e0e0074dfdcdd062851830313ac67b1f3bc361bb"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:a590153272448ee7823a8b55e0e0074dfdcdd062851830313ac67b1f3bc361bb"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_14_0_aarch64.whl", hash = "sha256:8a0dfd17cd126a4119690638b33077d5dc04b27a0da6e552a2ed70c552d4aaf8"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:8a0dfd17cd126a4119690638b33077d5dc04b27a0da6e552a2ed70c552d4aaf8"},
+    {file = "llama_cpp_python-0.2.74-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:79ea7cb285d3bbf85c464abd97b36e86888cd30121b1b06854b64d6148ab7a03"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_11_0_aarch64.whl", hash = "sha256:911bf5b140f6ed550e091849e59ec0d2d6509c2af50a8f096ac06cb900bf6a80"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:911bf5b140f6ed550e091849e59ec0d2d6509c2af50a8f096ac06cb900bf6a80"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_11_0_x86_64.whl", hash = "sha256:83df842583ce1aeb97a8636132325df3ca99887ad6dbbdd76294c47682770758"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_12_0_aarch64.whl", hash = "sha256:6d8febb9bdb8c4e8073de20acce484683a3e0b8386fbae58a069080a9d18e62e"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_12_0_arm64.whl", hash = "sha256:6d8febb9bdb8c4e8073de20acce484683a3e0b8386fbae58a069080a9d18e62e"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_12_0_x86_64.whl", hash = "sha256:4468e09d446faa8e0db97178824fabb036f1855b959af94dbec8ceda4eeb4362"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_13_0_aarch64.whl", hash = "sha256:19968885fb0884462d60a000cbf98c01dff5def0929b23797f2463e280a9ba47"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:19968885fb0884462d60a000cbf98c01dff5def0929b23797f2463e280a9ba47"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_14_0_aarch64.whl", hash = "sha256:6535e5faa83a03855258fcebbe53e4aa878bd2a2f8ac00ce751a6d61eb767ff2"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:6535e5faa83a03855258fcebbe53e4aa878bd2a2f8ac00ce751a6d61eb767ff2"},
+    {file = "llama_cpp_python-0.2.74-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:b1c6f31fb8ac0a917b863a00e24fc506d6cff789fae42743e94c281085965cc7"},
+]
+
+[package.dependencies]
+diskcache = ">=5.6.1"
+jinja2 = ">=2.11.3"
+numpy = ">=1.20.0"
+typing-extensions = ">=4.5.0"
+
+[package.extras]
+all = ["llama_cpp_python[dev,server,test]"]
+dev = ["black (>=23.3.0)", "httpx (>=0.24.1)", "mkdocs (>=1.4.3)", "mkdocs-material (>=9.1.18)", "mkdocstrings[python] (>=0.22.0)", "pytest (>=7.4.0)", "twine (>=4.0.2)"]
+server = ["PyYAML (>=5.1)", "fastapi (>=0.100.0)", "pydantic-settings (>=2.0.1)", "sse-starlette (>=1.6.1)", "starlette-context (>=0.3.6,<0.4)", "uvicorn (>=0.22.0)"]
+test = ["httpx (>=0.24.1)", "pytest (>=7.4.0)", "scipy (>=1.10)"]
+
+[package.source]
+type = "legacy"
+url = "https://abetlen.github.io/llama-cpp-python/whl/metal"
+reference = "llama-cpp-python-metal"
 
 [[package]]
 name = "markdown-it-py"
@@ -1647,7 +1749,6 @@ files = [
 
 [package.dependencies]
 anyio = ">=3.4.0,<5"
-typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart (>=0.0.7)", "pyyaml"]
@@ -2171,5 +2272,5 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = "<3.13,>=3.9"
-content-hash = "255ef04cbba01675df23cae685e170e85792ee4b71bcb3ee78af0d069577cdf0"
+python-versions = "<3.13,>=3.10"
+content-hash = "a96059eccadd5b5198a4a43ed1e2463bb77c31e56bf079f5b2b755820f45f1f0"
