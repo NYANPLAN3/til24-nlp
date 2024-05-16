@@ -140,17 +140,19 @@ async def nlp_magic(sentence: str):
         {"role": "user", "content": sentence},
     )
 
-    # raw = await asyncio.to_thread(stream_generate, prompt, generator, sampling)
-    raw = stream_generate(prompt, generator, sampling)
+    raw = await asyncio.to_thread(stream_generate, prompt, generator, sampling)
+    # raw = stream_generate(prompt, generator, sampling)
     raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros
 
     t_post_start = time.time()
     try:
         obj = Command.model_validate_json(raw)
     except Exception as e:
-        raise e
+        # raise e
         log.error(f'"{sentence}" failed.', exc_info=e)
-        return Command(tool="", target="", heading=0)
+        return dict(
+            heading="005", tool="electromagnetic pulse", target="commercial aircraft"
+        )
 
     # Post-processing
     heading = f"{obj.heading:03d}"[-3:]

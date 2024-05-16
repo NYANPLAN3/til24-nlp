@@ -29,7 +29,8 @@ __all__ = [
 log = logging.getLogger(__name__)
 
 log.info(f"Flash Attention: {has_flash_attn}")
-assert has_flash_attn, "Oh? The eval instance doesn't have flash attention? Debug time."
+# NOTE: T4 doesn't support flash attention.
+# assert has_flash_attn, "Oh? The eval instance doesn't have flash attention? Debug time."
 
 # Examples used:
 # https://github.com/turboderp/exllamav2/blob/master/examples/lm_format_enforcer.py
