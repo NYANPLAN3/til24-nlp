@@ -4,7 +4,7 @@ import logging
 import time
 
 import instructor
-from openai import OpenAI
+from openai import AsyncOpenAI
 from pydantic import BaseModel
 
 log = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ class Character(BaseModel):
 
 
 client = instructor.from_openai(
-    OpenAI(
+    AsyncOpenAI(
         base_url="http://localhost:5002/llama-cpp-python/v1",
         api_key="localhost",
     ),
@@ -27,23 +27,23 @@ client = instructor.from_openai(
 )
 
 
-def nlp_magic(sentence: str):
+async def nlp_magic(sentence: str):
     # enables `response_model` in create call
     # initialised
 
     starttime = time.time()
     try:
-        resp = client.chat.completions.create(
+        resp = await client.chat.completions.create(
             model="phi3",
             messages=[
                 {
                     "role": "system",
-                    "content": """tyou are used for function calling to catergorize a natural language prompt into the form
-                    tool: str,
-                    heading: int,
-                    target: str
-                    headings are integers. if a number is given, turn it into an integer
-                    """,
+                    "content": """you are used for function calling to catergorize a natural language prompt into the form
+tool: str,
+heading: int,
+target: str
+headings are integers. if a number is given, turn it into an integer.
+""",
                 },
                 {
                     "role": "user",
@@ -55,7 +55,7 @@ def nlp_magic(sentence: str):
         )
     except Exception as e:
         log.error(f'"{sentence}" failed.', exc_info=e)
-        return Character(tool="", target="", heading=0)
+        resp = Character(tool="", target="", heading=0)
 
     endtime = time.time()
     time_taken = endtime - starttime
