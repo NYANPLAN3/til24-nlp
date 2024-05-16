@@ -31,6 +31,7 @@ def main():
     df = pd.DataFrame(results)
     df.to_csv(results_dir / "nlp_results.csv", index=False)
     # calculate eval
+    # TODO: Another CSV for wrong answers
     eval_result = nlp_eval(
         [result["truth"] for result in results],
         [result["prediction"] for result in results],

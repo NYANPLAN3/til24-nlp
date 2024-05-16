@@ -29,6 +29,7 @@ __all__ = [
 log = logging.getLogger(__name__)
 
 log.info(f"Flash Attention: {has_flash_attn}")
+assert has_flash_attn, "Oh? The eval instance doesn't have flash attention? Debug time."
 
 # Examples used:
 # https://github.com/turboderp/exllamav2/blob/master/examples/lm_format_enforcer.py
@@ -36,12 +37,13 @@ log.info(f"Flash Attention: {has_flash_attn}")
 # turboderp is expert on the model loading itself, noamgat is the expert for the grammar.
 # So I adapt techniques from both accordingly.
 
+# TODO: Consider contrastive/tree/branch sampling? How?
 # See ExLlamaV2Sampler.Settings().
 JH_SAMPLING = dict(
-    temperature=0.85,
-    temperature_last=True,
-    top_k=50,
-    top_p=0.8,
+    temperature=0,  # 0.7
+    # temperature_last=True,
+    # top_k=50,
+    # top_p=0.8,
     token_repetition_penalty=1.0,  # 1 = no penalty
 )
 
@@ -114,10 +116,11 @@ def stream_generate(
     if preview:
         log.info(f"###PROMPT###\n{prompt}")
 
+    t_prompt_start = time.time()
+    # Cache the input_ids for the prompt.
     input_ids = tokenizer.encode(prompt)
     prompt_tokens = input_ids.shape[-1]
 
-    t_prompt_start = time.time()
     generator.begin_stream_ex(input_ids, sampling)
 
     t_stream_start = time.time()

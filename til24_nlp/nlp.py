@@ -43,6 +43,7 @@ sampling = ExLlamaV2Sampler.Settings(
 # idk what dataclass bug causes this not to be picked up.
 sampling.filter_prefer_eos = True
 
+# TODO: Consider CoT or other pre-prompt techniques? Effect on speed...
 # NOTE: JSON schema tends to confuse models unless you give examples. Perhaps, giving
 # solely examples is better.
 sys_prompt = (
