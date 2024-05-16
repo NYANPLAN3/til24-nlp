@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "<3.12,>=3.9"
+python = "<3.12,>=3.10"
 rich = "^13.7.1"
 fastapi = { extras = ["all"], version = "^0.111.0" }
 python-dotenv = "^1.0.1"
@@ -14,9 +14,13 @@ torch = "^2.3.0"
 exllamav2 = [
   { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
   { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
-  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp39-cp39-linux_x86_64.whl", python = "3.9.*" },
+]
+flash-attn = [
+  { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
+  { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
 ]
 tokenizers = "^0.19.1"
+lm-format-enforcer = "^0.10.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"

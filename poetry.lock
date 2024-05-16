@@ -312,6 +312,17 @@ trio = ["trio (>=0.23)"]
 wmi = ["wmi (>=1.5.1)"]
 
 [[package]]
+name = "einops"
+version = "0.8.0"
+description = "A new flavour of deep learning operations"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "einops-0.8.0-py3-none-any.whl", hash = "sha256:9572fb63046264a862693b0a87088af3bdc8c068fde03de63453cbbde245465f"},
+    {file = "einops-0.8.0.tar.gz", hash = "sha256:63486517fed345712a8385c100cb279108d9d47e6ae59099b07657e983deae85"},
+]
+
+[[package]]
 name = "email-validator"
 version = "2.1.1"
 description = "A robust email address syntax and deliverability validation library."
@@ -391,32 +402,6 @@ websockets = "*"
 [package.source]
 type = "url"
 url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp311-cp311-linux_x86_64.whl"
-
-[[package]]
-name = "exllamav2"
-version = "0.0.21+cu121"
-description = ""
-optional = false
-python-versions = "*"
-files = [
-    {file = "exllamav2-0.0.21+cu121-cp39-cp39-linux_x86_64.whl", hash = "sha256:ecc71141a127e68b221b90f4968eca9486a200cd4135500799feba61e11e50f4"},
-]
-
-[package.dependencies]
-fastparquet = "*"
-ninja = "*"
-numpy = "*"
-pandas = "*"
-pygments = "*"
-regex = "*"
-safetensors = ">=0.3.2"
-sentencepiece = ">=0.1.97"
-torch = ">=2.2.0"
-websockets = "*"
-
-[package.source]
-type = "url"
-url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp39-cp39-linux_x86_64.whl"
 
 [[package]]
 name = "fastapi"
@@ -538,6 +523,46 @@ files = [
 docs = ["furo (>=2023.9.10)", "sphinx (>=7.2.6)", "sphinx-autodoc-typehints (>=1.25.2)"]
 testing = ["covdefaults (>=2.3)", "coverage (>=7.3.2)", "diff-cover (>=8.0.1)", "pytest (>=7.4.3)", "pytest-cov (>=4.1)", "pytest-mock (>=3.12)", "pytest-timeout (>=2.2)"]
 typing = ["typing-extensions (>=4.8)"]
+
+[[package]]
+name = "flash-attn"
+version = "2.5.8"
+description = "Flash Attention: Fast and Memory-Efficient Exact Attention"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl", hash = "sha256:13454dd3d37cf173649bd389b84614b8072fb283f8f2fd23a65ab66caafc304b"},
+]
+
+[package.dependencies]
+einops = "*"
+ninja = "*"
+packaging = "*"
+torch = "*"
+
+[package.source]
+type = "url"
+url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl"
+
+[[package]]
+name = "flash-attn"
+version = "2.5.8"
+description = "Flash Attention: Fast and Memory-Efficient Exact Attention"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp311-cp311-linux_x86_64.whl", hash = "sha256:0b28549d7a7105dfa9300751de038f1e607fe11bb96ac2bdd29b474926ca8e41"},
+]
+
+[package.dependencies]
+einops = "*"
+ninja = "*"
+packaging = "*"
+torch = "*"
+
+[package.source]
+type = "url"
+url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp311-cp311-linux_x86_64.whl"
 
 [[package]]
 name = "fsspec"
@@ -741,6 +766,17 @@ files = [
 ]
 
 [[package]]
+name = "interegular"
+version = "0.3.3"
+description = "a regex intersection checker"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "interegular-0.3.3-py37-none-any.whl", hash = "sha256:b0c07007d48c89d6d19f7204972d369b2a77222722e126b6aa63aa721dc3b19c"},
+    {file = "interegular-0.3.3.tar.gz", hash = "sha256:d9b697b21b34884711399ba0f0376914b81899ce670032486d0d048344a76600"},
+]
+
+[[package]]
 name = "itsdangerous"
 version = "2.2.0"
 description = "Safely pass data to untrusted environments and back."
@@ -778,6 +814,23 @@ files = [
     {file = "joblib-1.4.2-py3-none-any.whl", hash = "sha256:06d478d5674cbc267e7496a410ee875abd68e4340feff4490bcb7afb88060ae6"},
     {file = "joblib-1.4.2.tar.gz", hash = "sha256:2382c5816b2636fbd20a09e0f4e9dad4736765fdfb7dca582943b9c1366b3f0e"},
 ]
+
+[[package]]
+name = "lm-format-enforcer"
+version = "0.10.1"
+description = "Enforce the output format (JSON Schema, Regex etc) of a language model"
+optional = false
+python-versions = "<4.0,>=3.8"
+files = [
+    {file = "lm_format_enforcer-0.10.1-py3-none-any.whl", hash = "sha256:5520004af248d787930327ead052aeff75e21fad595f388e5eade9f062ffddda"},
+    {file = "lm_format_enforcer-0.10.1.tar.gz", hash = "sha256:23e65a4199714fca348063e8c906838622619f905a673c4d6d428eee7e7d2095"},
+]
+
+[package.dependencies]
+interegular = ">=0.3.2"
+packaging = "*"
+pydantic = ">=1.10.8"
+pyyaml = "*"
 
 [[package]]
 name = "markdown-it-py"
@@ -920,20 +973,20 @@ tests = ["pytest (>=4.6)"]
 
 [[package]]
 name = "networkx"
-version = "3.2.1"
+version = "3.3"
 description = "Python package for creating and manipulating graphs and networks"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 files = [
-    {file = "networkx-3.2.1-py3-none-any.whl", hash = "sha256:f18c69adc97877c42332c170849c96cefa91881c99a7cb3e95b7c659ebdc1ec2"},
-    {file = "networkx-3.2.1.tar.gz", hash = "sha256:9f1bb5cf3409bf324e0a722c20bdb4c20ee39bf1c30ce8ae499c8502b0b5e0c6"},
+    {file = "networkx-3.3-py3-none-any.whl", hash = "sha256:28575580c6ebdaf4505b22c6256a2b9de86b316dc63ba9e93abde3d78dfdbcf2"},
+    {file = "networkx-3.3.tar.gz", hash = "sha256:0c127d8b2f4865f59ae9cb8aafcd60b5c70f3241ebd66f7defad7c4ab90126c9"},
 ]
 
 [package.extras]
-default = ["matplotlib (>=3.5)", "numpy (>=1.22)", "pandas (>=1.4)", "scipy (>=1.9,!=1.11.0,!=1.11.1)"]
-developer = ["changelist (==0.4)", "mypy (>=1.1)", "pre-commit (>=3.2)", "rtoml"]
-doc = ["nb2plots (>=0.7)", "nbconvert (<7.9)", "numpydoc (>=1.6)", "pillow (>=9.4)", "pydata-sphinx-theme (>=0.14)", "sphinx (>=7)", "sphinx-gallery (>=0.14)", "texext (>=0.6.7)"]
-extra = ["lxml (>=4.6)", "pydot (>=1.4.2)", "pygraphviz (>=1.11)", "sympy (>=1.10)"]
+default = ["matplotlib (>=3.6)", "numpy (>=1.23)", "pandas (>=1.4)", "scipy (>=1.9,!=1.11.0,!=1.11.1)"]
+developer = ["changelist (==0.5)", "mypy (>=1.1)", "pre-commit (>=3.2)", "rtoml"]
+doc = ["myst-nb (>=1.0)", "numpydoc (>=1.7)", "pillow (>=9.4)", "pydata-sphinx-theme (>=0.14)", "sphinx (>=7)", "sphinx-gallery (>=0.14)", "texext (>=0.6.7)"]
+extra = ["lxml (>=4.6)", "pydot (>=2.0)", "pygraphviz (>=1.12)", "sympy (>=1.10)"]
 test = ["pytest (>=7.2)", "pytest-cov (>=4.0)"]
 
 [[package]]
@@ -2014,7 +2067,6 @@ files = [
 
 [package.dependencies]
 anyio = ">=3.4.0,<5"
-typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart (>=0.0.7)", "pyyaml"]
@@ -2654,5 +2706,5 @@ files = [
 
 [metadata]
 lock-version = "2.0"
-python-versions = "<3.12,>=3.9"
-content-hash = "921f1f5729f1cfdf620a427d33213235ad0e455926da7468fea7d64f2e3e714c"
+python-versions = "<3.12,>=3.10"
+content-hash = "950b1938c9a07ddf9e1ea0f9ad201c1f7da2162014a346c0e1a6eb3b99d97c8e"
