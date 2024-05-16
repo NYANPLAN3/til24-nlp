@@ -163,3 +163,5 @@ cython_debug/
 # others
 /results
 /data
+/models/*
+!/models/.keep
