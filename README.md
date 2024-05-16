@@ -12,6 +12,7 @@ Oh yeah, this template should work with the fancy "Dev Containers: Clone Reposit
 in Container Volume..." feature.
 
 Note: competition uses port 5002 for NLP server.
+Note: Eval is both case & punctuation sensitive.
 
 ## Useful Commands
 

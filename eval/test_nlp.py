@@ -31,19 +31,35 @@ def main():
     df = pd.DataFrame(results)
     df.to_csv(results_dir / "nlp_results.csv", index=False)
     # calculate eval
-    # TODO: Another CSV for wrong answers
     eval_result = nlp_eval(
         [result["truth"] for result in results],
         [result["prediction"] for result in results],
     )
     print(f"NLP result: {eval_result}")
+    wrong_arr = []
+    for result in results:
+        for k, v1 in result["truth"].items():
+            v2 = result["prediction"][k]
+            if v1 != v2:
+                wrong_arr.append(
+                    dict(
+                        key=result["key"],
+                        transcript=result["transcript"],
+                        field=k,
+                        truth=v1,
+                        prediction=v2,
+                    )
+                )
+    wrong_df = pd.DataFrame(wrong_arr)
+    wrong_df.to_csv(results_dir / "nlp_wrong.csv", index=False)
 
 
 def run_batched(
-    instances: List[Dict[str, str | int]], batch_size: int = 4
+    instances: List[Dict[str, str | int]], batch_size: int = 64
 ) -> List[Dict[str, str | int]]:
     # split into batches
     results = []
+    # for index in tqdm(range(0, 256, batch_size)):
     for index in tqdm(range(0, len(instances), batch_size)):
         _instances = instances[index : index + batch_size]
         response = requests.post(
@@ -62,6 +78,7 @@ def run_batched(
             [
                 {
                     "key": _instances[i]["key"],
+                    "transcript": _instances[i]["transcript"],
                     "truth": {
                         field: _instances[i][field]
                         for field in ("heading", "target", "tool")

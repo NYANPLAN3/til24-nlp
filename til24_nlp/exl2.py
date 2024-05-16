@@ -40,10 +40,10 @@ assert has_flash_attn, "Oh? The eval instance doesn't have flash attention? Debu
 # TODO: Consider contrastive/tree/branch sampling? How?
 # See ExLlamaV2Sampler.Settings().
 JH_SAMPLING = dict(
-    temperature=0,  # 0.7
+    temperature=0.0,  # 0.7
     # temperature_last=True,
-    # top_k=50,
-    # top_p=0.8,
+    top_k=100,
+    top_p=1.0,
     token_repetition_penalty=1.0,  # 1 = no penalty
 )
 

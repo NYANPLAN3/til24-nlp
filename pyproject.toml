@@ -28,6 +28,7 @@ poethepoet = "*"
 rouge-score = "^0.1.2"
 pandas = "^2.2.2"
 requests = "^2.31.0"
+ipykernel = "^6.29.4"
 
 [tool.poe.tasks]
 dev = "python dev.py"
