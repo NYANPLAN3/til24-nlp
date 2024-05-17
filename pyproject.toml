@@ -8,7 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "<3.12,>=3.10"
 rich = "^13.7.1"
-fastapi = { extras = ["all"], version = "^0.111.0" }
+# fastapi = { extras = ["all"], version = "^0.111.0" }
+fastapi-slim = "^0.111.0"
 python-dotenv = "^1.0.1"
 torch = "^2.3.0"
 exllamav2 = [
@@ -17,6 +18,8 @@ exllamav2 = [
 ]
 tokenizers = "^0.19.1"
 lm-format-enforcer = "^0.10.1"
+uvicorn = "^0.29.0"
+uvloop = "^0.19.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"
