@@ -3,7 +3,7 @@
 #FROM python:3.11-slim-bookworm
 # Example of prebuilt pytorch image to save download time.
 #FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
-FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:12.1.1-base-ubuntu22.04
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
