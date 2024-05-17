@@ -18,7 +18,9 @@ def phi3_prompt_formatter(*msgs: Msg) -> str:
             # arr.append(f"<|user|>\n{content}<|end|>\n")
         elif role == "user":
             arr.append(f"<|user|>\n{content}<|end|>\n")
-        elif role == "bot":
+        elif role == "assistant":
             arr.append(f"<|assistant|>\n{content}<|end|>\n")
+        else:
+            arr.append(f"<|{role}|>\n{content}<|end|>\n")
     arr.append("<|assistant|>\n")
     return "".join(arr)

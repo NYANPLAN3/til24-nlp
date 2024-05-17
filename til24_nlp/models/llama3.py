@@ -1,24 +1,17 @@
-"""Phi-3 model."""
+"""Llama-3 model."""
 
 from ..structs import Msg
 
-__all__ = ["phi3_prompt_formatter", "PHI3_EOS_IDS"]
+__all__ = ["llama3_prompt_formatter", "LLAMA3_EOS_IDS"]
 
-PHI3_EOS_IDS = (32000, 32001, 32007)
+LLAMA3_EOS_IDS = (128001, 128009)
 
 
-def phi3_prompt_formatter(*msgs: Msg) -> str:
+def llama3_prompt_formatter(*msgs: Msg) -> str:
     """Format messages for prompt."""
-    arr = []
+    arr = ["<|begin_of_text|>"]
     for m in msgs:
         role, content = m["role"], m["content"]
-        if role == "system":
-            # arr.append(f"<|system|>\n{content}<|end|>\n")
-            # See https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/discussions/51
-            arr.append(f"<|user|>\n{content}<|end|>\n")
-        elif role == "user":
-            arr.append(f"<|user|>\n{content}<|end|>\n")
-        elif role == "bot":
-            arr.append(f"<|assistant|>\n{content}<|end|>\n")
-    arr.append("<|assistant|>\n")
+        arr.append(f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>")
+    arr.append(f"<|start_header_id|>assistant<|end_header_id|>\n\n")
     return "".join(arr)

@@ -22,7 +22,7 @@ class ExtractRequest(BaseModel):
 class Msg(TypedDict):
     """Type of a message."""
 
-    role: Literal["system", "user", "bot"]
+    role: Literal["system", "user", "assistant"]
     content: str
 
 
