@@ -6,6 +6,7 @@ import sys
 import time
 from typing import Literal
 
+import torch
 from exllamav2 import (
     ExLlamaV2,
     ExLlamaV2Cache,
@@ -69,6 +70,7 @@ def stream_generate(
     sampling: ExLlamaV2Sampler.Settings,
     max_new_tokens: int = 256,
     preview: bool = False,
+    pre_toks: torch.Tensor | None = None,
 ):
     """Generate a response."""
     tokenizer = generator.tokenizer
@@ -77,11 +79,10 @@ def stream_generate(
         log.info(f"###PROMPT###\n{prompt}")
 
     t_prompt_start = time.time()
-    # Cache the input_ids for the prompt.
-    input_ids = tokenizer.encode(prompt)
-    prompt_tokens = input_ids.shape[-1]
-
-    generator.begin_stream_ex(input_ids, sampling)
+    in_ids = tokenizer.encode(prompt, encode_special_tokens=pre_toks is None)
+    if pre_toks is not None:
+        in_ids = torch.cat((pre_toks, in_ids), dim=-1)
+    generator.begin_stream_ex(in_ids, sampling)
 
     t_stream_start = time.time()
     result = []
@@ -98,12 +99,12 @@ def stream_generate(
         print()
 
     t_end = time.time()
-
     dur_prompt = t_stream_start - t_prompt_start
     dur_tokens = t_end - t_stream_start
+    num_toks = in_ids.shape[-1]
 
     log.info(
-        f"Prompt: {dur_prompt:.2f} s, {prompt_tokens} toks, {prompt_tokens / dur_prompt:.2f} tok/s\n"
+        f"Prompt: {dur_prompt:.2f} s, {num_toks} toks, {num_toks / dur_prompt:.2f} tok/s\n"
         f"Response: {dur_tokens:.2f} s, {len(result)} toks, {len(result) / dur_tokens:.2f} tok/s"
     )
 

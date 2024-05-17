@@ -7,20 +7,16 @@ __all__ = ["phi3_prompt_formatter", "PHI3_EOS_IDS"]
 PHI3_EOS_IDS = (32000, 32001, 32007)
 
 
-def phi3_prompt_formatter(*msgs: Msg) -> str:
+def encode(msg: Msg) -> str:
+    """Encode a message."""
+    role, content = msg["role"], msg["content"]
+    # See https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/discussions/51
+    # role = "user" if role == "system" else role
+    return f"<|{role}|>\n{content}<|end|>\n"
+
+
+def phi3_prompt_formatter(*msgs: Msg, is_last=False) -> str:
     """Format messages for prompt."""
-    arr = ["<s>"]
-    for m in msgs:
-        role, content = m["role"], m["content"]
-        if role == "system":
-            arr.append(f"<|system|>\n{content}<|end|>\n")
-            # See https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/discussions/51
-            # arr.append(f"<|user|>\n{content}<|end|>\n")
-        elif role == "user":
-            arr.append(f"<|user|>\n{content}<|end|>\n")
-        elif role == "assistant":
-            arr.append(f"<|assistant|>\n{content}<|end|>\n")
-        else:
-            arr.append(f"<|{role}|>\n{content}<|end|>\n")
-    arr.append("<|assistant|>\n")
-    return "".join(arr)
+    if is_last:
+        return encode(msgs[0]) + "<|assistant|>\n"
+    return "<s>" + "".join(encode(m) for m in msgs)

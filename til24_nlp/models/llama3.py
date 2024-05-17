@@ -7,11 +7,13 @@ __all__ = ["llama3_prompt_formatter", "LLAMA3_EOS_IDS"]
 LLAMA3_EOS_IDS = (128001, 128009)
 
 
-def llama3_prompt_formatter(*msgs: Msg) -> str:
+def encode(msg: Msg) -> str:
+    """Encode a message."""
+    return f'<|start_header_id|>{msg["role"]}<|end_header_id|>\n\n{msg["content"]}<|eot_id|>'
+
+
+def llama3_prompt_formatter(*msgs: Msg, is_last=False) -> str:
     """Format messages for prompt."""
-    arr = ["<|begin_of_text|>"]
-    for m in msgs:
-        role, content = m["role"], m["content"]
-        arr.append(f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>")
-    arr.append(f"<|start_header_id|>assistant<|end_header_id|>\n\n")
-    return "".join(arr)
+    if is_last:
+        return encode(msgs[0]) + "<|start_header_id|>assistant<|end_header_id|>\n\n"
+    return "<|begin_of_text|>" + "".join(encode(m) for m in msgs)
