@@ -18,9 +18,7 @@ from exllamav2 import (
 from exllamav2.attn import has_flash_attn
 from exllamav2.generator import ExLlamaV2Sampler, ExLlamaV2StreamingGenerator
 
-from .structs import Msg
-
-__all__ = ["load_exl2_model_dir", "phi3_prompt_formatter", "stream_generate"]
+__all__ = ["load_exl2_model_dir", "stream_generate"]
 
 log = logging.getLogger(__name__)
 
@@ -33,23 +31,6 @@ log.info(f"Flash Attention: {has_flash_attn}")
 # https://github.com/noamgat/lm-format-enforcer/blob/main/samples/colab_exllamav2_integration.ipynb
 # turboderp is expert on the model loading itself, noamgat is the expert for the grammar.
 # So I adapt techniques from both accordingly.
-
-
-def phi3_prompt_formatter(*msgs: Msg) -> str:
-    """Format messages for prompt."""
-    arr = []
-    for m in msgs:
-        role, content = m["role"], m["content"]
-        if role == "system":
-            # arr.append(f"<|system|>\n{content}<|end|>\n")
-            # See https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/discussions/51
-            arr.append(f"<|user|>\n{content}<|end|>\n")
-        elif role == "user":
-            arr.append(f"<|user|>\n{content}<|end|>\n")
-        elif role == "bot":
-            arr.append(f"<|assistant|>\n{content}<|end|>\n")
-    arr.append("<|assistant|>\n")
-    return "".join(arr)
 
 
 def load_exl2_model_dir(

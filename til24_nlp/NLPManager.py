@@ -9,10 +9,16 @@ from exllamav2.generator.filters import ExLlamaV2PrefixFilter
 from lmformatenforcer import JsonSchemaParser
 from lmformatenforcer.integrations.exllamav2 import ExLlamaV2TokenEnforcerFilter
 
-from .exl2 import load_exl2_model_dir, phi3_prompt_formatter, stream_generate
+from .exl2 import load_exl2_model_dir, stream_generate
 from .prompt import EXAMPLES, SYS_PROMPT
 from .structs import Command, CommandJSON
-from .values import JH_SAMPLING, MODEL_PATH, PHI3_EOS_IDS, PLACEHOLDER
+from .values import (
+    EXTRA_EOS_TOKENS,
+    JH_SAMPLING,
+    MODEL_PATH,
+    PLACEHOLDER,
+    PROMPT_FORMATTER,
+)
 
 __all__ = ["NLPManager"]
 
@@ -28,7 +34,7 @@ class NLPManager:
 
         generator = load_exl2_model_dir(MODEL_PATH)
         model, tokenizer = generator.model, generator.tokenizer
-        generator.set_stop_conditions([tokenizer.eos_token_id, *PHI3_EOS_IDS])
+        generator.set_stop_conditions([tokenizer.eos_token_id, *EXTRA_EOS_TOKENS])
         sampling = ExLlamaV2Sampler.Settings(
             **JH_SAMPLING,
             filters=[
@@ -44,7 +50,7 @@ class NLPManager:
 
     async def extract(self, transcript: str) -> CommandJSON:
         """Extract JSON command."""
-        prompt = phi3_prompt_formatter(
+        prompt = PROMPT_FORMATTER(
             {"role": "system", "content": SYS_PROMPT},
             *EXAMPLES,
             {"role": "user", "content": transcript},
