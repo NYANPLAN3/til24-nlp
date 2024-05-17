@@ -9,13 +9,13 @@ PHI3_EOS_IDS = (32000, 32001, 32007)
 
 def phi3_prompt_formatter(*msgs: Msg) -> str:
     """Format messages for prompt."""
-    arr = ["<s>"]
+    arr = []
     for m in msgs:
         role, content = m["role"], m["content"]
         if role == "system":
-            arr.append(f"<|system|>\n{content}<|end|>\n")
+            # arr.append(f"<|system|>\n{content}<|end|>\n")
             # See https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/discussions/51
-            # arr.append(f"<|user|>\n{content}<|end|>\n")
+            arr.append(f"<|user|>\n{content}<|end|>\n")
         elif role == "user":
             arr.append(f"<|user|>\n{content}<|end|>\n")
         elif role == "bot":
