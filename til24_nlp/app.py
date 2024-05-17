@@ -73,7 +73,7 @@ def create_app():
             # out_data = PLACEHOLDER
             out_data = nlp.extract(instance["transcript"])
             preds.append(out_data)
-            await asyncio.sleep(0.01)  # Allow other requests to run.
+            await asyncio.sleep(0)  # Allow other requests to run.
 
         return {"predictions": preds}
 
