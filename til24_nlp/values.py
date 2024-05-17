@@ -27,11 +27,25 @@ JH_SAMPLING = dict(
     token_repetition_penalty=1.0,  # 1 = no penalty
 )
 
+CHEESE_SET = {
+    "hostile",
+    "turret",
+    "system",
+    "cluster",
+    "weapon",
+    "device",
+    "unit",
+    "strike",
+    "defence",
+    "defense",
+    "countermeasure",
+}
 
-# MODEL_PATH = "models/bartowski_Phi-3-mini-4k-instruct-exl2"
-# EXTRA_EOS_TOKENS = PHI3_EOS_IDS
-# PROMPT_FORMATTER = phi3_prompt_formatter
 
-MODEL_PATH = "models/bartowski_Meta-Llama-3-8B-Instruct-exl2"
-EXTRA_EOS_TOKENS = LLAMA3_EOS_IDS
-PROMPT_FORMATTER = llama3_prompt_formatter
+MODEL_PATH = "models/bartowski_Phi-3-mini-4k-instruct-exl2"
+EXTRA_EOS_TOKENS = PHI3_EOS_IDS
+PROMPT_FORMATTER = phi3_prompt_formatter
+
+# MODEL_PATH = "models/bartowski_Meta-Llama-3-8B-Instruct-exl2"
+# EXTRA_EOS_TOKENS = LLAMA3_EOS_IDS
+# PROMPT_FORMATTER = llama3_prompt_formatter

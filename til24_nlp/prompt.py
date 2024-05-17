@@ -14,8 +14,8 @@ SYS_PROMPT = (
     # "The audio transcripts are low quality due to background noise and radio static, hence use your expertise to fill in the gaps. "
     "For each transcript, extract the following information ad verbatim:\n"
     '- "heading" (int): direction to aim as a positive integer.\n'
-    '- "tool" (str): type of weapon to use.\n'
-    '- "target" (str): appearance and type of target to hit.\n'
+    '- "tool" (str): tool to use.\n'
+    '- "target" (str): target\'s type and colours.\n'
     # '- "target_colors" (List[str]): color(s)(if any) of target in original order.\n'
     # "If you cannot find any of the above, you should infer them from the context. "
     # 'For "tool", omit action verbs. '
@@ -44,7 +44,7 @@ EXAMPLES = (
     },
     {
         "role": "user",
-        "content": "Turret, lock onto target, unfriendly silver and yellow light aircraft, at three five two. Deploy electromagnetic pulse.",
+        "content": "Turret, lock onto target, unfriendly silver and yellow light aircraft, at three five two. Deploy electromagnetic pulse weapon.",
     },
     {
         "role": "assistant",
@@ -94,7 +94,7 @@ EXAMPLES = (
     # Case: unnecessary suffix.
     {
         "role": "user",
-        "content": "Activate machine gun system, target the hostile yellow, white, and orange fighter plane heading two niner five. Engage at will.",
+        "content": "Activate machine gun turret, target the hostile yellow, white, and orange fighter plane heading two niner five. Engage at will.",
     },
     {
         "role": "assistant",

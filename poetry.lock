@@ -2858,7 +2858,17 @@ files = [
     {file = "websockets-12.0.tar.gz", hash = "sha256:81df9cbcbb6c260de1e007e58c011bfebe2dafc8435107b0537f393dd38c8b1b"},
 ]
 
+[[package]]
+name = "word2number"
+version = "1.1"
+description = "Convert number words eg. three hundred and forty two to numbers (342)."
+optional = false
+python-versions = "*"
+files = [
+    {file = "word2number-1.1.zip", hash = "sha256:70e27a5d387f67b04c71fbb7621c05930b19bfd26efd6851e6e0f9969dcde7d0"},
+]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "<3.12,>=3.10"
-content-hash = "f52201b31ea23a4575ceb1b20e70a7178d5223ece2a3d3dd512ddc171c580a38"
+content-hash = "7a95a067521a838c420953706a7ec15fda44a5f3db9161d82435ce727b1e96b4"
