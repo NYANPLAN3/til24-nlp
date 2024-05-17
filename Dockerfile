@@ -19,14 +19,19 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   --mount=type=cache,target=/var/lib/apt,sharing=locked \
   apt-get update && apt-get install -y --no-install-recommends python3-pip
 
+# Split multiple RUN commands to avoid caching issues.
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
+  pip install -U pip
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
+  pip install torch==2.3.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+
 # COPY should be from least changed to most frequently changed.
 COPY --link models ./models
 
 # Remember to regenerate requirements.txt!
 COPY --link requirements.txt ./
 RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
-  pip install -U pip \
-  && pip install -r requirements.txt
+  pip install -r requirements.txt
 
 COPY --link til24_nlp ./til24_nlp
 
