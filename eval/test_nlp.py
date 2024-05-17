@@ -55,7 +55,7 @@ def main():
 
 
 def run_batched(
-    instances: List[Dict[str, str | int]], batch_size: int = 64
+    instances: List[Dict[str, str | int]], batch_size: int = 1
 ) -> List[Dict[str, str | int]]:
     # split into batches
     results = []
@@ -64,6 +64,7 @@ def run_batched(
         _instances = instances[index : index + batch_size]
         response = requests.post(
             "http://localhost:5002/extract",
+            # "http://172.17.0.1:5002/extract",
             data=json.dumps(
                 {
                     "instances": [
@@ -74,20 +75,22 @@ def run_batched(
             ),
         )
         _results = response.json()["predictions"]
-        results.extend(
-            [
-                {
-                    "key": _instances[i]["key"],
-                    "transcript": _instances[i]["transcript"],
-                    "truth": {
-                        field: _instances[i][field]
-                        for field in ("heading", "target", "tool")
-                    },
-                    "prediction": _results[i],
-                }
-                for i in range(len(_instances))
-            ]
-        )
+        for i in range(len(_instances)):
+            result = {
+                "key": _instances[i]["key"],
+                "transcript": _instances[i]["transcript"],
+                "truth": {
+                    field: _instances[i][field]
+                    for field in ("heading", "target", "tool")
+                },
+                "prediction": _results[i],
+            }
+            results.append(result)
+
+            for k, v1 in result["truth"].items():
+                v2 = result["prediction"][k]
+                if v1 != v2:
+                    tqdm.write(f'pred: {v2}, real: {v1} | {result["transcript"]}')
     return results
 
 
