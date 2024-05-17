@@ -1,10 +1,18 @@
 """Types."""
 
+import json
 from typing import List, Literal, TypedDict
 
 from pydantic import BaseModel
 
-__all__ = ["ExtractEntry", "ExtractRequest", "Msg", "Command", "CommandJSON"]
+__all__ = [
+    "ExtractEntry",
+    "ExtractRequest",
+    "Msg",
+    "Command",
+    "COMMAND_SCHEMA",
+    "CommandJSON",
+]
 
 
 class ExtractEntry(BaseModel):
@@ -39,6 +47,9 @@ class Command(BaseModel):
     tool: str
     target: str
     # target_colors: List[str]
+
+
+COMMAND_SCHEMA = f"{json.dumps(Command.model_json_schema())}"
 
 
 class CommandJSON(TypedDict):
