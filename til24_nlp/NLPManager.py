@@ -100,7 +100,7 @@ class NLPManager:
         self.generator = generator
         self.sampling = sampling
 
-    async def extract(self, transcript: str) -> CommandJSON:
+    def extract(self, transcript: str) -> CommandJSON:
         """Extract JSON command."""
         transcript = cheese_transcript(transcript)
 
@@ -111,7 +111,7 @@ class NLPManager:
         )
 
         # raw = await asyncio.to_thread(stream_generate, prompt, generator, sampling)
-        raw = await stream_generate(prompt, self.generator, self.sampling)
+        raw = stream_generate(prompt, self.generator, self.sampling)
         t_post_start = time.time()
 
         raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros

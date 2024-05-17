@@ -11,10 +11,12 @@ rich = "^13.7.1"
 # fastapi = { extras = ["all"], version = "^0.111.0" }
 fastapi-slim = "^0.111.0"
 python-dotenv = "^1.0.1"
-torch = "^2.3.0"
+torch = { version = "^2.3.0", source = "cu118" }
 exllamav2 = [
-  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
-  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
+  #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
+  #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
+  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
+  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
 ]
 tokenizers = "^0.19.1"
 lm-format-enforcer = "^0.10.1"
@@ -40,11 +42,18 @@ flash-attn = [
   { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
 ]
 
+[[tool.poetry.source]]
+name = "cu118"
+url = "https://download.pytorch.org/whl/cu118/"
+priority = "supplemental"
+
 [tool.poe.tasks]
-dev = "python dev.py"
-prod = "docker run --rm --gpus all -p 5002:5002 nyanplan3-nlp:latest"
+# use_exec for some tasks to avoid hangs on SIGINT.
+dev = { cmd = "python dev.py", use_exec = true }
+prod = { cmd = "docker run --rm --gpus all -p 5002:5002 nyanplan3-nlp:latest", use_exec = true }
 test = "python eval/test_nlp.py"
 publish = "docker push asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-nyanplan3/nyanplan3-nlp:latest"
+requirements = "poetry export -o requirements.txt --without-hashes"
 
 [tool.poe.tasks.build]
 cmd = """docker build -f Dockerfile . \
@@ -53,6 +62,7 @@ cmd = """docker build -f Dockerfile . \
   -t nyanplan3-nlp:${tag} \
   -t asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-nyanplan3/nyanplan3-nlp:${tag} \
 """
+deps = ["requirements"]
 args = [{ name = "tag", positional = true, required = true }]
 
 [tool.ruff.lint]

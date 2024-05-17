@@ -1,6 +1,5 @@
 """Utilities for handling exllamav2."""
 
-import asyncio
 import logging
 import os
 import sys
@@ -64,7 +63,7 @@ def load_exl2_model_dir(
     return generator
 
 
-async def stream_generate(
+def stream_generate(
     prompt: str,
     generator: ExLlamaV2StreamingGenerator,
     sampling: ExLlamaV2Sampler.Settings,
@@ -87,7 +86,6 @@ async def stream_generate(
     t_stream_start = time.time()
     result = []
     while True:
-        await asyncio.sleep(0)  # Allow other reqs like the health check to run.
         res = generator.stream_ex()
         chunk, eos = res["chunk"], res["eos"]
         result.append(chunk)

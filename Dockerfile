@@ -3,7 +3,7 @@
 #FROM python:3.11-slim-bookworm
 # Example of prebuilt pytorch image to save download time.
 #FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
-FROM nvidia/cuda:12.1.1-base-ubuntu22.04
+FROM nvidia/cuda:11.8.0-base-ubuntu22.04
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -22,11 +22,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # COPY should be from least changed to most frequently changed.
 COPY --link models ./models
 
-COPY --link poetry.lock pyproject.toml README.md ./
-RUN mkdir til24_nlp && touch til24_nlp/__init__.py
+# Remember to regenerate requirements.txt!
+COPY --link requirements.txt ./
 RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
   pip install -U pip \
-  && pip install -e .
+  && pip install -r requirements.txt
 
 COPY --link til24_nlp ./til24_nlp
 

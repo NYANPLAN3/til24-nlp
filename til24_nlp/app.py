@@ -1,5 +1,7 @@
 """Main app."""
 
+import asyncio
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -69,8 +71,9 @@ def create_app():
         preds = []
         for instance in data["instances"]:
             # out_data = PLACEHOLDER
-            out_data = await nlp.extract(instance["transcript"])
+            out_data = nlp.extract(instance["transcript"])
             preds.append(out_data)
+            await asyncio.sleep(0.01)  # Allow other requests to run.
 
         return {"predictions": preds}
 
