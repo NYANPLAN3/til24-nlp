@@ -90,12 +90,12 @@ class NLPManager:
         sampling = ExLlamaV2Sampler.Settings(
             **JH_SAMPLING,
             filters=[
-                ExLlamaV2PrefixFilter(model, tokenizer, "{"),
+                ExLlamaV2PrefixFilter(model, tokenizer, "{\n"),
                 ExLlamaV2TokenEnforcerFilter(parser, tokenizer),
             ],
         )
         # idk what dataclass bug causes this not to be picked up.
-        sampling.filter_prefer_eos = True
+        # sampling.filter_prefer_eos = True
 
         self.generator = generator
         self.sampling = sampling
@@ -121,10 +121,10 @@ class NLPManager:
         except Exception as e:
             # raise e
             log.error(f'"{transcript}" failed.', exc_info=e)
-            return PLACEHOLDER
+            obj = Command.model_validate(PLACEHOLDER)
 
         # Post-processing
-        heading = f"{obj.heading:03d}"[-3:]
+        heading = f"{int(''.join(c for c in obj.heading if c.isnumeric())):03d}"[-3:]
         tool = obj.tool.strip()
         tool = tool if tool.isupper() else tool.lower()  # handle EMP
         target = obj.target.strip().lower()

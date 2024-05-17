@@ -5,6 +5,8 @@ from typing import List, Literal, TypedDict
 
 from pydantic import BaseModel
 
+from til24_nlp.utils import pp_json
+
 __all__ = [
     "ExtractEntry",
     "ExtractRequest",
@@ -34,22 +36,15 @@ class Msg(TypedDict):
     content: str
 
 
+# NOTE: DO NOT PUT A DOCSTRING IT APPEARS IN THE SCHEMA.
 class Command(BaseModel):
-    """Command schema.
-
-    Note, instead of matching the competition schema, we use a schema that is easier
-    for the model, then calculate the competition schema from it using smart observations.
-
-    NVM, it made things worse, Phi-3 can't do lists of colors apparently.
-    """
-
-    heading: int
+    heading: str
     tool: str
     target: str
     # target_colors: List[str]
 
 
-COMMAND_SCHEMA = f"{json.dumps(Command.model_json_schema())}"
+COMMAND_SCHEMA = pp_json(Command.model_json_schema())
 
 
 class CommandJSON(TypedDict):

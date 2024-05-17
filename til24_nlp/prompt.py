@@ -1,5 +1,7 @@
 """Model prompt."""
 
+from til24_nlp.utils import pp_json
+
 from .structs import COMMAND_SCHEMA
 
 __all__ = ["SYS_PROMPT", "EXAMPLES"]
@@ -13,7 +15,7 @@ SYS_PROMPT = (
     "Background noise and radio static may have degraded the audio quality of some transcripts. "
     # "The audio transcripts are low quality due to background noise and radio static, hence use your expertise to fill in the gaps. "
     "For each transcript, extract the following information ad verbatim:\n"
-    '- "heading" (int): direction to aim as a positive integer.\n'
+    '- "heading" (str): direction to aim as an integer from "000" to "360".\n'
     '- "tool" (str): tool to use.\n'
     '- "target" (str): target\'s type and colours.\n'
     # '- "target_colors" (List[str]): color(s)(if any) of target in original order.\n'
@@ -23,9 +25,9 @@ SYS_PROMPT = (
     # 'For "target", do not paraphrase or use synonyms. '
     # 'For "target_colors", list the colors in the order they appear, ignoring colors '
     # "that do not refer to the target. Leave empty if no colors refer to the target. "
-    # "Output only JSON objects."
-    "Output only the corresponding JSON object, following the schema provided below:\n"
-    f"{COMMAND_SCHEMA}"
+    "Output only the corresponding JSON object."
+    # "Output only the corresponding JSON object, following the schema provided below:\n"
+    # f"{COMMAND_SCHEMA}"
 )
 
 EXAMPLES = (
@@ -36,7 +38,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":007,"tool":"EMP","target":"silver, green, and orange cargo aircraft"}',
+        "content": pp_json(
+            {
+                "heading": "007",
+                "tool": "EMP",
+                "target": "silver, green, and orange cargo aircraft",
+            }
+        ),
     },
     {
         "role": "system",
@@ -48,7 +56,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":352,"tool":"electromagnetic pulse","target":"silver and yellow light aircraft"}',
+        "content": pp_json(
+            {
+                "heading": "352",
+                "tool": "electromagnetic pulse",
+                "target": "silver and yellow light aircraft",
+            }
+        ),
     },
     {
         "role": "system",
@@ -61,7 +75,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":317,"tool":"torpedo","target":"green camouflage APC"}',
+        "content": pp_json(
+            {
+                "heading": "317",
+                "tool": "torpedo",
+                "target": "green camouflage APC",
+            }
+        ),
     },
     {
         "role": "system",
@@ -73,7 +93,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":113,"tool":"LMG","target":"pink and purple drone"}',
+        "content": pp_json(
+            {
+                "heading": "113",
+                "tool": "LMG",
+                "target": "pink and purple drone",
+            }
+        ),
     },
     {
         "role": "system",
@@ -85,7 +111,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":200,"tool":"light machine gun","target":"green and red zombie"}',
+        "content": pp_json(
+            {
+                "heading": "200",
+                "tool": "light machine gun",
+                "target": "green and red zombie",
+            }
+        ),
     },
     {
         "role": "system",
@@ -98,7 +130,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":295,"tool":"machine gun","target":"yellow, white, and orange fighter plane"}',
+        "content": pp_json(
+            {
+                "heading": "295",
+                "tool": "machine gun",
+                "target": "yellow, white, and orange fighter plane",
+            }
+        ),
     },
     {
         "role": "system",
@@ -111,7 +149,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":119,"tool":"drone catcher","target":"red and blue drone"}',
+        "content": pp_json(
+            {
+                "heading": "119",
+                "tool": "drone catcher",
+                "target": "red and blue drone",
+            }
+        ),
     },
     {
         "role": "system",
@@ -124,7 +168,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":098,"tool":"machine gun","target":"white, yellow, and orange light aircraft"}',
+        "content": pp_json(
+            {
+                "heading": "098",
+                "tool": "machine gun",
+                "target": "white, yellow, and orange light aircraft",
+            }
+        ),
     },
     {
         "role": "system",
@@ -137,7 +187,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":305,"tool":"interceptor jets","target":"blue, black, and silver cargo aircraft"}',
+        "content": pp_json(
+            {
+                "heading": "305",
+                "tool": "interceptor jets",
+                "target": "blue, black, and silver cargo aircraft",
+            }
+        ),
     },
     {
         "role": "system",
@@ -150,7 +206,13 @@ EXAMPLES = (
     },
     {
         "role": "assistant",
-        "content": '{"heading":240,"tool":"surface-to-air missiles","target":"black, red, and purple missile"}',
+        "content": pp_json(
+            {
+                "heading": "240",
+                "tool": "surface-to-air missiles",
+                "target": "black, red, and purple missile",
+            }
+        ),
     },
     {
         "role": "system",
