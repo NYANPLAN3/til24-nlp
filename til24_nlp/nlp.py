@@ -18,6 +18,7 @@ from .exl2 import (
     phi3_prompt_formatter,
     stream_generate,
 )
+from .structs import PLACEHOLDER
 
 log = logging.getLogger(__name__)
 
@@ -140,19 +141,18 @@ async def nlp_magic(sentence: str):
         {"role": "user", "content": sentence},
     )
 
-    raw = await asyncio.to_thread(stream_generate, prompt, generator, sampling)
-    # raw = stream_generate(prompt, generator, sampling)
+    # raw = await asyncio.to_thread(stream_generate, prompt, generator, sampling)
+    raw = await stream_generate(prompt, generator, sampling)
+    t_post_start = time.time()
+
     raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros
 
-    t_post_start = time.time()
     try:
         obj = Command.model_validate_json(raw)
     except Exception as e:
         # raise e
         log.error(f'"{sentence}" failed.', exc_info=e)
-        return dict(
-            heading="005", tool="electromagnetic pulse", target="commercial aircraft"
-        )
+        return PLACEHOLDER
 
     # Post-processing
     heading = f"{obj.heading:03d}"[-3:]

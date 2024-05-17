@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 
 from .nlp import nlp_magic
-from .structs import ExtractRequest
+from .structs import PLACEHOLDER, ExtractRequest
 
 __all__ = ["app"]
 
@@ -63,12 +63,8 @@ async def extract(req: ExtractRequest):
     preds = []
     for instance in req.instances:
         in_text = instance.transcript
-        # out_data = await nlp_magic(in_text)
-        out_data = {
-            "heading": "005",
-            "tool": "electromagnetic pulse",
-            "target": "commercial aircraft",
-        }
+        out_data = await nlp_magic(in_text)
+        out_data = PLACEHOLDER
         preds.append(out_data)
 
     return {"predictions": preds}
