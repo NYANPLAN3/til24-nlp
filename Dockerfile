@@ -31,4 +31,4 @@ RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
 COPY --link til24_nlp ./til24_nlp
 
 EXPOSE 5002
-CMD ["uvicorn", "--host=0.0.0.0", "--port=5002", "til24_nlp:app"]
+CMD ["uvicorn", "--host=0.0.0.0", "--port=5002", "--factory", "til24_nlp:create_app"]

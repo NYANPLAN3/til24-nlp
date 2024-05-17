@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 import time
-from typing import Literal, TypedDict
+from typing import Literal
 
 from exllamav2 import (
     ExLlamaV2,
@@ -18,14 +18,9 @@ from exllamav2 import (
 from exllamav2.attn import has_flash_attn
 from exllamav2.generator import ExLlamaV2Sampler, ExLlamaV2StreamingGenerator
 
-__all__ = [
-    "load_exl2_model_dir",
-    "JH_SAMPLING",
-    "Msg",
-    "phi3_prompt_formatter",
-    "PHI3_EOS_IDS",
-    "stream_generate",
-]
+from .structs import Msg
+
+__all__ = ["load_exl2_model_dir", "phi3_prompt_formatter", "stream_generate"]
 
 log = logging.getLogger(__name__)
 
@@ -38,25 +33,6 @@ log.info(f"Flash Attention: {has_flash_attn}")
 # https://github.com/noamgat/lm-format-enforcer/blob/main/samples/colab_exllamav2_integration.ipynb
 # turboderp is expert on the model loading itself, noamgat is the expert for the grammar.
 # So I adapt techniques from both accordingly.
-
-# TODO: Consider contrastive/tree/branch sampling? How?
-# See ExLlamaV2Sampler.Settings().
-JH_SAMPLING = dict(
-    temperature=0.0,  # 0.7
-    # temperature_last=True,
-    top_k=100,
-    top_p=1.0,
-    token_repetition_penalty=1.0,  # 1 = no penalty
-)
-
-PHI3_EOS_IDS = (32000, 32001, 32007)
-
-
-class Msg(TypedDict):
-    """Type of a message."""
-
-    role: Literal["system", "user", "bot"]
-    content: str
 
 
 def phi3_prompt_formatter(*msgs: Msg) -> str:

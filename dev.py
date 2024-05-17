@@ -21,9 +21,9 @@ def create_debug_app():
     )
     logging.getLogger("til24_nlp").setLevel(logging.DEBUG)
 
-    from til24_nlp import app
+    from til24_nlp import create_app
 
-    return app
+    return create_app()
 
 
 if __name__ == "__main__":
