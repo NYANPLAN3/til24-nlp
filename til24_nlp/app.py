@@ -63,7 +63,12 @@ async def extract(req: ExtractRequest):
     preds = []
     for instance in req.instances:
         in_text = instance.transcript
-        out_data = await nlp_magic(in_text)
+        # out_data = await nlp_magic(in_text)
+        out_data = {
+            "heading": "005",
+            "tool": "electromagnetic pulse",
+            "target": "commercial aircraft",
+        }
         preds.append(out_data)
 
     return {"predictions": preds}

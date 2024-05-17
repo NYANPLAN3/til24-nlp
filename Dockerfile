@@ -31,4 +31,4 @@ RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
 COPY --link til24_nlp ./til24_nlp
 
 EXPOSE 5002
-CMD ["fastapi", "run", "til24_nlp", "--proxy-headers", "--port", "5002"]
+CMD ["fastapi", "run", "til24_nlp:app", "--proxy-headers", "--port", "5002"]

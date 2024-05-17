@@ -15,10 +15,6 @@ exllamav2 = [
   { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
   { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
 ]
-flash-attn = [
-  { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
-  { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
-]
 tokenizers = "^0.19.1"
 lm-format-enforcer = "^0.10.1"
 
@@ -29,6 +25,16 @@ rouge-score = "^0.1.2"
 pandas = "^2.2.2"
 requests = "^2.31.0"
 ipykernel = "^6.29.4"
+
+[tool.poetry.group.flash]
+optional = true
+
+[tool.poetry.group.flash.dependencies]
+# flash-attn will be supported on final machine (RTX 4070), but not on eval machine (T4).
+flash-attn = [
+  { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
+  { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
+]
 
 [tool.poe.tasks]
 dev = "python dev.py"
