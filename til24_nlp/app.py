@@ -63,8 +63,8 @@ async def extract(req: ExtractRequest):
     preds = []
     for instance in req.instances:
         in_text = instance.transcript
+        # out_data = PLACEHOLDER
         out_data = await nlp_magic(in_text)
-        out_data = PLACEHOLDER
         preds.append(out_data)
 
     return {"predictions": preds}
