@@ -25,7 +25,7 @@ SYS_PROMPT = (
     # 'For "target", do not paraphrase or use synonyms. '
     # 'For "target_colors", list the colors in the order they appear, ignoring colors '
     # "that do not refer to the target. Leave empty if no colors refer to the target. "
-    "Output only the corresponding JSON object."
+    "Output only the corresponding minified JSON object."
     # "Output only the corresponding JSON object, following the schema provided below:\n"
     # f"{COMMAND_SCHEMA}"
 )

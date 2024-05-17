@@ -33,6 +33,7 @@ CHEESE_SET = {
     "system",
     "cluster",
     "weapon",
+    "weaponry",
     "device",
     "unit",
     "strike",

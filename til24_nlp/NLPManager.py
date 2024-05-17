@@ -90,28 +90,40 @@ class NLPManager:
         sampling = ExLlamaV2Sampler.Settings(
             **JH_SAMPLING,
             filters=[
-                ExLlamaV2PrefixFilter(model, tokenizer, "{\n"),
+                ExLlamaV2PrefixFilter(model, tokenizer, '{"'),
+                # ExLlamaV2PrefixFilter(model, tokenizer, '{\n'),
                 ExLlamaV2TokenEnforcerFilter(parser, tokenizer),
             ],
         )
         # idk what dataclass bug causes this not to be picked up.
-        # sampling.filter_prefer_eos = True
+        sampling.filter_prefer_eos = True
+
+        preprompt = PROMPT_FORMATTER(
+            {"role": "system", "content": SYS_PROMPT},
+            *EXAMPLES,
+        )
+        log.info(f"###PRE###\n{preprompt}")
 
         self.generator = generator
         self.sampling = sampling
+        self.pre_toks = tokenizer.encode(preprompt, encode_special_tokens=True)
+        # print(np.array2string(self.pre_toks.numpy()[0], threshold=np.inf))
 
     def extract(self, transcript: str) -> CommandJSON:
         """Extract JSON command."""
+        # Pre-processing.
+        t_pre_start = time.time()
         transcript = cheese_transcript(transcript)
+        prompt = PROMPT_FORMATTER({"role": "user", "content": transcript}, is_last=True)
+        dur_pre = time.time() - t_pre_start
+        if dur_pre > 0.01:
+            log.info(f"Pre-process: {dur_pre:.2f} s")
 
-        prompt = PROMPT_FORMATTER(
-            {"role": "system", "content": SYS_PROMPT},
-            *EXAMPLES,
-            {"role": "user", "content": transcript},
-        )
-
+        # Processing.
         # raw = await asyncio.to_thread(stream_generate, prompt, generator, sampling)
-        raw = stream_generate(prompt, self.generator, self.sampling)
+        raw = stream_generate(
+            prompt, self.generator, self.sampling, pre_toks=self.pre_toks
+        )
         t_post_start = time.time()
 
         raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros
@@ -123,7 +135,7 @@ class NLPManager:
             log.error(f'"{transcript}" failed.', exc_info=e)
             obj = Command.model_validate(PLACEHOLDER)
 
-        # Post-processing
+        # Post-processing.
         heading = f"{int(''.join(c for c in obj.heading if c.isnumeric())):03d}"[-3:]
         tool = obj.tool.strip()
         tool = tool if tool.isupper() else tool.lower()  # handle EMP
