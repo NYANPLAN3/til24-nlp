@@ -41,7 +41,7 @@ flash-attn = [
 
 [tool.poe.tasks]
 dev = "python dev.py"
-prod = "docker run --rm --gpus all -p 5002:5002 nyanplan3-nlp"
+prod = "docker run --rm --gpus all -p 5002:5002 nyanplan3-nlp:latest"
 test = "python eval/test_nlp.py"
 publish = "docker push asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-nyanplan3/nyanplan3-nlp:latest"
 

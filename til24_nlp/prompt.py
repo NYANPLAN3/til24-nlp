@@ -10,7 +10,7 @@ SYS_PROMPT = (
     "which has multiple tools at its disposal. "
     # "The audio transcripts are low quality due to background noise and radio static, hence use your expertise to fill in the gaps. "
     "For each transcript, you will extract ad verbatim:\n"
-    '- "heading" (int): direction to aim.\n'
+    '- "heading" (int): direction to aim as positive integer.\n'
     '- "tool" (str): weapon to use.\n'
     '- "target" (str): target to hit.\n'
     # '- "target_colors" (List[str]): color(s)(if any) of target in original order.\n'

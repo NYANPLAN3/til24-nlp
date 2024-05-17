@@ -59,7 +59,7 @@ class NLPManager:
         try:
             obj = Command.model_validate_json(raw)
         except Exception as e:
-            # raise e
+            raise e
             log.error(f'"{transcript}" failed.', exc_info=e)
             return PLACEHOLDER
 

@@ -8,10 +8,9 @@ import logging
 import os
 import sys
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 from .NLPManager import NLPManager
-from .structs import ExtractRequest
 from .values import PLACEHOLDER
 
 __all__ = ["create_app"]
@@ -53,7 +52,7 @@ def create_app():
         return {"message": "health ok"}
 
     @app.post("/extract")
-    async def extract(req: ExtractRequest):
+    async def extract(req: Request):
         """Performs QA extraction given a context string.
 
         returns a dictionary with fields:
@@ -64,11 +63,13 @@ def create_app():
             "tool": str,
         }
         """
+        # NOTE: This is just in case the server is giving non-compliant requests for some reason.
+        data = await req.json()
+
         preds = []
-        for instance in req.instances:
-            in_text = instance.transcript
+        for instance in data["instances"]:
             # out_data = PLACEHOLDER
-            out_data = await nlp.extract(in_text)
+            out_data = await nlp.extract(instance["transcript"])
             preds.append(out_data)
 
         return {"predictions": preds}
