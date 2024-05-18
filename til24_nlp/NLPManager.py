@@ -10,10 +10,10 @@ from lmformatenforcer import JsonSchemaParser
 from lmformatenforcer.integrations.exllamav2 import ExLlamaV2TokenEnforcerFilter
 
 from .cheese import (
+    cheese_filter_transcript,
     cheese_heading,
     cheese_target_plurality,
     cheese_tool_plurality,
-    cheese_transcript,
 )
 from .exl2 import load_exl2_model_dir, stream_generate
 from .prompt import EXAMPLES, SYS_PROMPT
@@ -67,7 +67,7 @@ class NLPManager:
         """Extract JSON command."""
         # Pre-processing.
         t_pre_start = time.time()
-        transcript = cheese_transcript(transcript)
+        transcript = cheese_filter_transcript(transcript)
         prompt = PROMPT_FORMATTER({"role": "user", "content": transcript}, is_last=True)
         dur_pre = time.time() - t_pre_start
         if dur_pre > 0.01:

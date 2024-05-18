@@ -5,7 +5,10 @@ __all__ = [
     "MODEL_PATH",
     "EXTRA_EOS_TOKENS",
     "PLACEHOLDER",
-    "ENABLE_CHEESE",
+    "ENABLE_RISKY_CHEESE",
+    "ENABLE_CHEESE_HEADING",
+    "ENABLE_CHEESE_FILTER_TRANSCRIPT",
+    "DISABLE_CHEESE_PLURALITY",
     "PROMPT_FORMATTER",
 ]
 
@@ -28,7 +31,15 @@ JH_SAMPLING = dict(
     token_repetition_penalty=1.0,  # 1 = no penalty
 )
 
-ENABLE_CHEESE = True
+# Enable/disable all risky cheeses.
+ENABLE_RISKY_CHEESE = True
+
+# Enable/disable individual risky cheeses.
+ENABLE_CHEESE_HEADING = True
+ENABLE_CHEESE_FILTER_TRANSCRIPT = True
+
+# Disable safe cheeses.
+DISABLE_CHEESE_PLURALITY = False
 
 
 MODEL_PATH = "models/bartowski_Phi-3-mini-4k-instruct-exl2"

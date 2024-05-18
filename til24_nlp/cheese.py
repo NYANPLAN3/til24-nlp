@@ -5,11 +5,11 @@ from typing import Tuple
 
 from word2number.w2n import word_to_num
 
-from .values import ENABLE_CHEESE
+from .values import *
 
 __all__ = [
     "cheese_heading",
-    "cheese_transcript",
+    "cheese_filter_transcript",
     "cheese_tool_plurality",
     "cheese_target_plurality",
     "target_from_colors",
@@ -32,7 +32,7 @@ def check_digit(word: str) -> Tuple[bool, int | None]:
 
 def cheese_heading(transcript: str):
     """Extract heading based off sequence of 3 digits."""
-    if not ENABLE_CHEESE:
+    if not ENABLE_RISKY_CHEESE or not ENABLE_CHEESE_HEADING:
         return None
 
     streak = []
@@ -55,7 +55,7 @@ def cheese_heading(transcript: str):
     return None
 
 
-CHEESE_RM_SET = {
+FILTER_SET = {
     "hostile",
     "turret",
     "system",
@@ -71,9 +71,9 @@ CHEESE_RM_SET = {
 }
 
 
-def cheese_transcript(transcript: str):
+def cheese_filter_transcript(transcript: str):
     """Remove words that often trip up the model."""
-    if not ENABLE_CHEESE:
+    if not ENABLE_RISKY_CHEESE or not ENABLE_CHEESE_FILTER_TRANSCRIPT:
         return transcript
 
     arr = ""
@@ -83,7 +83,7 @@ def cheese_transcript(transcript: str):
             w, p = w[:-1], w[-1]
         if len(w) < 3:
             arr += f" {word}"
-        elif w not in CHEESE_RM_SET and not (w[-1] == "s" and w[:-1] in CHEESE_RM_SET):
+        elif w not in FILTER_SET and not (w[-1] == "s" and w[:-1] in FILTER_SET):
             arr += f" {word}"
         elif p is not None:
             arr += p
@@ -92,6 +92,10 @@ def cheese_transcript(transcript: str):
 
 def cheese_tool_plurality(tool: str):
     """Auto-correct plurality based on last word."""
+    # Is always safe & hard to prompt for, so ENABLE_CHEESE doesn't control this.
+    if DISABLE_CHEESE_PLURALITY:
+        return tool
+
     if tool.endswith(("missile", "jet")):
         return tool + "s"
     elif tool.endswith(("missiles", "jets")):
@@ -105,6 +109,10 @@ def cheese_tool_plurality(tool: str):
 
 def cheese_target_plurality(target: str):
     """Auto-correct plurality based on last word."""
+    # Is always safe & hard to prompt for, so ENABLE_CHEESE doesn't control this.
+    if DISABLE_CHEESE_PLURALITY:
+        return target
+
     if target.endswith("s"):
         return target[:-1]
     return target
