@@ -30,192 +30,81 @@ SYS_PROMPT = (
     # f"{COMMAND_SCHEMA}"
 )
 
+
+def _example(qn: str, ans: str, reason: str):
+    return (
+        {"role": "user", "content": qn},
+        {"role": "assistant", "content": ans},
+        {"role": "system", "content": reason},
+    )
+
+
+def _ans(heading: str, tool: str, target: str):
+    return pp_json(dict(heading=heading, tool=tool, target=target))
+
+
+case_verbatim_1 = _example(
+    "Engage target one, silver, green, and orange cargo aircraft with EMP countermeasure. Heading zero zero seven over.",
+    _ans("007", "EMP", "silver, green, and orange cargo aircraft"),
+    'Above answer correctly extracts "EMP" ad verbatim instead of replacing it with "electromagnetic pulse".',
+)
+case_verbatim_2 = _example(
+    "Turret, lock onto target, unfriendly silver and yellow light aircraft, at three five two. Deploy electromagnetic pulse weapon.",
+    _ans("352", "electromagnetic pulse", "silver and yellow light aircraft"),
+    'Above answer correctly extracts "electromagnetic pulse" ad verbatim instead of replacing it with "EMP".',
+)
+case_verbatim_3 = _example(
+    "Shoot green camouflage APC with torpedo system. Heading three one seven over.",
+    _ans("317", "torpedo", "green camouflage APC"),
+    'Above answer correctly extracts "APC" ad verbatim instead of replacing it with "armoured personnel carrier".',
+)
+case_verbatim_4 = _example(
+    "Team Alpha, use your LMG to shoot down hostile pink and purple drone cluster at one one three, over.",
+    _ans("113", "LMG", "pink and purple drone"),
+    'Above answer correctly extracts "LMG" ad verbatim instead of replacing it with "light machine gun".',
+)
+case_verbatim_5 = _example(
+    "Activate light machine gun system, target the dangerous green and red zombie cluster. Heading two zero zero. Engage at will.",
+    _ans("200", "light machine gun", "green and red zombie"),
+    'Above answer correctly extracts "light machine gun" ad verbatim instead of replacing it with "LMG".',
+)
+case_suffix_1 = _example(
+    "Activate machine gun turret, target the hostile yellow, white, and orange fighter plane heading two niner five. Engage at will.",
+    _ans("295", "machine gun", "yellow, white, and orange fighter plane"),
+    'Above answer correctly discards the unnecessary suffix of "system".',
+)
+case_suffix_2 = _example(
+    "At one one nine engage red and blue drone cluster with drone catcher.",
+    _ans("119", "drone catcher", "red and blue drone"),
+    'Above answer correctly discards the unnecessary suffix of "cluster".',
+)
+case_suffix_3 = _example(
+    "Turret Foxtrot, heading zero niner eight, engage white, yellow, and orange light aircraft with machine gun fire.",
+    _ans("098", "machine gun", "white, yellow, and orange light aircraft"),
+    'Above answer correctly discards the unnecessary suffix of "fire".',
+)
+case_prefix_1 = _example(
+    "Control tower to interceptor jets, scramble immediately. We have an enemy blue, black, and silver cargo aircraft on heading three zero five. Engage and intercept the target. Over.",
+    _ans("305", "interceptor jets", "blue, black, and silver cargo aircraft"),
+    'Above answer correctly discards the unnecessary prefix of "enemy" which is not part of the target\'s appearance.',
+)
+case_plurality_1 = _example(
+    "Block black, red, and purple missile at two four zero degrees with surface-to-air missiles.",
+    _ans("240", "surface-to-air missiles", "black, red, and purple missile"),
+    'Above answer correctly maintains the plurality of "surface-to-air missiles".',
+)
+
+
 EXAMPLES = (
-    # Cases: ad verbatim.
-    {
-        "role": "user",
-        "content": "Engage target one, silver, green, and orange cargo aircraft with EMP countermeasure. Heading zero zero seven over.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "007",
-                "tool": "EMP",
-                "target": "silver, green, and orange cargo aircraft",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly extracts "EMP" ad verbatim instead of replacing it with "electromagnetic pulse".',
-    },
-    {
-        "role": "user",
-        "content": "Turret, lock onto target, unfriendly silver and yellow light aircraft, at three five two. Deploy electromagnetic pulse weapon.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "352",
-                "tool": "electromagnetic pulse",
-                "target": "silver and yellow light aircraft",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly extracts "electromagnetic pulse" ad verbatim instead of replacing it with "EMP".',
-    },
-    # Cases: ad verbatim.
-    {
-        "role": "user",
-        "content": "Shoot green camouflage APC with torpedo system. Heading three one seven over.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "317",
-                "tool": "torpedo",
-                "target": "green camouflage APC",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly extracts "APC" ad verbatim instead of replacing it with "armoured personnel carrier".',
-    },
-    {
-        "role": "user",
-        "content": "Team Alpha, use your LMG to shoot down hostile pink and purple drone cluster at one one three, over.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "113",
-                "tool": "LMG",
-                "target": "pink and purple drone",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly extracts "LMG" ad verbatim instead of replacing it with "light machine gun".',
-    },
-    {
-        "role": "user",
-        "content": "Activate light machine gun system, target the dangerous green and red zombie cluster. Heading two zero zero. Engage at will.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "200",
-                "tool": "light machine gun",
-                "target": "green and red zombie",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly extracts "light machine gun" ad verbatim instead of replacing it with "LMG".',
-    },
-    # Case: unnecessary suffix.
-    {
-        "role": "user",
-        "content": "Activate machine gun turret, target the hostile yellow, white, and orange fighter plane heading two niner five. Engage at will.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "295",
-                "tool": "machine gun",
-                "target": "yellow, white, and orange fighter plane",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly discards the unnecessary suffix of "system".',
-    },
-    # Case: unnecessary suffix 2.
-    {
-        "role": "user",
-        "content": "At one one nine engage red and blue drone cluster with drone catcher.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "119",
-                "tool": "drone catcher",
-                "target": "red and blue drone",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly discards the unnecessary suffix of "cluster".',
-    },
-    # Case: unnecessary suffix 4.
-    {
-        "role": "user",
-        "content": "Turret Foxtrot, heading zero niner eight, engage white, yellow, and orange light aircraft with machine gun fire.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "098",
-                "tool": "machine gun",
-                "target": "white, yellow, and orange light aircraft",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly discards the unnecessary suffix of "fire".',
-    },
-    # Case: unnecessary prefix.
-    {
-        "role": "user",
-        "content": "Control tower to interceptor jets, scramble immediately. We have an enemy blue, black, and silver cargo aircraft on heading three zero five. Engage and intercept the target. Over.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "305",
-                "tool": "interceptor jets",
-                "target": "blue, black, and silver cargo aircraft",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly discards the unnecessary prefix of "enemy" which is not part of the target\'s appearance.',
-    },
-    # Case: plurality. # NOTE: IDK WHY THIS ONE EXAMPLE IS THE DEALBREAKER, KEEP IT EVEN WITH THE PLURALITY FIXES.
-    {
-        "role": "user",
-        "content": "Block black, red, and purple missile at two four zero degrees with surface-to-air missiles.",
-    },
-    {
-        "role": "assistant",
-        "content": pp_json(
-            {
-                "heading": "240",
-                "tool": "surface-to-air missiles",
-                "target": "black, red, and purple missile",
-            }
-        ),
-    },
-    {
-        "role": "system",
-        "content": 'Above answer correctly maintains the plurality of "surface-to-air missiles".',
-    },
+    *case_verbatim_1,
+    *case_verbatim_2,
+    *case_verbatim_3,
+    *case_verbatim_4,
+    *case_verbatim_5,
+    *case_suffix_1,
+    *case_suffix_2,
+    *case_suffix_3,
+    *case_prefix_1,
+    # NOTE: THIS EXAMPLE IS A DEALBREAKER IDK WHY. KEEP IT LAST INSPITE OF PLURALITY FIX.
+    *case_plurality_1,
 )
