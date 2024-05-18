@@ -1,34 +1,41 @@
 """Model prompt."""
 
-from til24_nlp.utils import pp_json
-
-from .structs import COMMAND_SCHEMA
+from .structs import CheeseCommand, Command
+from .utils import pp_json
+from .values import ENABLE_CHEESE_SKIP_HEADING
 
 __all__ = ["SYS_PROMPT", "EXAMPLES"]
+
+CMD_CLS = CheeseCommand if ENABLE_CHEESE_SKIP_HEADING else Command
 
 # TODO: Consider CoT or other pre-prompt techniques? Effect on speed...
 # NOTE: JSON schema tends to confuse models unless you give examples. Perhaps, giving
 # solely examples is better.
 SYS_PROMPT = (
-    "Your job is to convert audio transcripts into computer-parsable data for a "
-    "civilian defence turret which has multiple tools at its disposal. "
-    "Background noise and radio static may have degraded the audio quality of some transcripts. "
-    # "The audio transcripts are low quality due to background noise and radio static, hence use your expertise to fill in the gaps. "
-    "For each transcript, extract the following information ad verbatim:\n"
-    '- "heading" (str): direction to aim as an integer from "000" to "360".\n'
-    '- "tool" (str): tool to use.\n'
-    '- "target" (str): target\'s type and colours.\n'
-    # '- "target_colors" (List[str]): color(s)(if any) of target in original order.\n'
-    # "If you cannot find any of the above, you should infer them from the context. "
-    # 'For "tool", omit action verbs. '
-    # 'You should keep acronyms as acronyms and nouns as nouns without paraphrasing or substituting. '
-    # 'For "target", do not paraphrase or use synonyms. '
-    # 'For "target_colors", list the colors in the order they appear, ignoring colors '
-    # "that do not refer to the target. Leave empty if no colors refer to the target. "
-    "Output only the corresponding minified JSON object."
-    # "Output only the corresponding JSON object, following the schema provided below:\n"
-    # f"{COMMAND_SCHEMA}"
+    "Your job is to convert audio transcripts into computer-parsable data for a ",
+    "civilian defence turret which has multiple tools at its disposal. ",
+    "Background noise and radio static may have degraded the audio quality of some transcripts. ",
+    # "The audio transcripts are low quality due to background noise and radio static, hence use your expertise to fill in the gaps. ",
+    "For each transcript, extract the following information ad verbatim:\n",
+    (
+        ""
+        if ENABLE_CHEESE_SKIP_HEADING
+        else '- "heading" (str): direction to aim as an integer from "000" to "360".\n'
+    ),
+    '- "tool" (str): tool to use.\n',
+    '- "target" (str): target\'s type and colours.\n',
+    # '- "target_colors" (List[str]): color(s)(if any) of target in original order.\n',
+    # "If you cannot find any of the above, you should infer them from the context. ",
+    # 'For "tool", omit action verbs. ',
+    # 'You should keep acronyms as acronyms and nouns as nouns without paraphrasing or substituting. ',
+    # 'For "target", do not paraphrase or use synonyms. ',
+    # 'For "target_colors", list the colors in the order they appear, ignoring colors ',
+    # "that do not refer to the target. Leave empty if no colors refer to the target. ",
+    "Output only the corresponding minified JSON object.",
+    # "Output only the corresponding JSON object, following the schema provided below:\n",
+    # f"{pp_json(CMD_CLS.model_json_schema())}",
 )
+SYS_PROMPT = "".join(SYS_PROMPT)
 
 
 def _example(qn: str, ans: str, reason: str):
@@ -40,7 +47,10 @@ def _example(qn: str, ans: str, reason: str):
 
 
 def _ans(heading: str, tool: str, target: str):
-    return pp_json(dict(heading=heading, tool=tool, target=target))
+    o = dict(heading=heading, tool=tool, target=target)
+    if ENABLE_CHEESE_SKIP_HEADING:
+        o.pop("heading")
+    return pp_json(o)
 
 
 case_verbatim_1 = _example(

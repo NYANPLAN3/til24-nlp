@@ -17,8 +17,9 @@ from .cheese import (
 )
 from .exl2 import load_exl2_model_dir, stream_generate
 from .prompt import EXAMPLES, SYS_PROMPT
-from .structs import Command, CommandJSON
+from .structs import CheeseCommand, Command, CommandJSON
 from .values import (
+    ENABLE_CHEESE_SKIP_HEADING,
     EXTRA_EOS_TOKENS,
     JH_SAMPLING,
     MODEL_PATH,
@@ -30,13 +31,15 @@ __all__ = ["NLPManager"]
 
 log = logging.getLogger(__name__)
 
+CMD_CLS = CheeseCommand if ENABLE_CHEESE_SKIP_HEADING else Command
+
 
 class NLPManager:
     """NLP Manager."""
 
     def __init__(self):
         """Init."""
-        parser = JsonSchemaParser(Command.model_json_schema())
+        parser = JsonSchemaParser(CMD_CLS.model_json_schema())
 
         generator = load_exl2_model_dir(MODEL_PATH)
         model, tokenizer = generator.model, generator.tokenizer
@@ -82,11 +85,16 @@ class NLPManager:
         raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros
 
         try:
-            obj = Command.model_validate_json(raw)
+            obj = CMD_CLS.model_validate_json(raw)
         except Exception as e:
             # raise e
             log.error(f'"{transcript}" failed.', exc_info=e)
             obj = Command.model_validate(PLACEHOLDER)
+
+        if isinstance(obj, CheeseCommand):
+            obj = Command(
+                heading=PLACEHOLDER["heading"], tool=obj.tool, target=obj.target
+            )
 
         # Post-processing.
         heading = f"{int(''.join(c for c in obj.heading if c.isnumeric())):03d}"[-3:]

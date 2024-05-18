@@ -18,6 +18,8 @@ from exllamav2 import (
 from exllamav2.attn import has_flash_attn
 from exllamav2.generator import ExLlamaV2Sampler, ExLlamaV2StreamingGenerator
 
+from .values import DEBUG_PREVIEW
+
 __all__ = ["load_exl2_model_dir", "stream_generate"]
 
 log = logging.getLogger(__name__)
@@ -69,7 +71,7 @@ def stream_generate(
     generator: ExLlamaV2StreamingGenerator,
     sampling: ExLlamaV2Sampler.Settings,
     max_new_tokens: int = 256,
-    preview: bool = False,
+    preview: bool = DEBUG_PREVIEW,
     pre_toks: torch.Tensor | None = None,
 ):
     """Generate a response."""
