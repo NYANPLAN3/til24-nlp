@@ -11,12 +11,6 @@ rich = "^13.7.1"
 # fastapi = { extras = ["all"], version = "^0.111.0" }
 fastapi-slim = "^0.111.0"
 python-dotenv = "^1.0.1"
-exllamav2 = [
-  #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
-  #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
-  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
-  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
-]
 tokenizers = "^0.19.1"
 lm-format-enforcer = "^0.10.1"
 uvicorn = "^0.29.0"
@@ -31,7 +25,14 @@ rouge-score = "^0.1.2"
 pandas = "^2.2.2"
 requests = "^2.31.0"
 ipykernel = "^6.29.4"
-torch = { version = "^2.3.0", source = "cu118" }
+#torch = { version = "^2.3.0", source = "cu118" }
+torch = { version = "^2.3.0", source = "PyPI" }
+exllamav2 = [
+  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
+  { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
+  #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
+  #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
+]
 
 [tool.poetry.group.flash]
 optional = true
@@ -46,7 +47,8 @@ flash-attn = [
 [[tool.poetry.source]]
 name = "cu118"
 url = "https://download.pytorch.org/whl/cu118/"
-priority = "supplemental"
+#priority = "supplemental"
+priority = "explicit"
 
 [tool.poe.tasks]
 # use_exec for some tasks to avoid hangs on SIGINT.

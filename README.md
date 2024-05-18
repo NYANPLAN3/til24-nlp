@@ -13,6 +13,7 @@ in Container Volume..." feature.
 
 Note: competition uses port 5002 for NLP server.
 Note: Eval is both case & punctuation sensitive.
+Note: Compute Capability of T4 is 7.5, RTX 4070 Ti is 8.9.
 
 ## Useful Commands
 
