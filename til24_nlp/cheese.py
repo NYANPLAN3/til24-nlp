@@ -5,9 +5,15 @@ from typing import Tuple
 
 from word2number.w2n import word_to_num
 
-from .values import CHEESE_SET, ENABLE_CHEESE
+from .values import ENABLE_CHEESE
 
-__all__ = ["cheese_heading", "cheese_transcript", "target_from_colors"]
+__all__ = [
+    "cheese_heading",
+    "cheese_transcript",
+    "cheese_tool_plurality",
+    "cheese_target_plurality",
+    "target_from_colors",
+]
 
 
 def check_digit(word: str) -> Tuple[bool, int | None]:
@@ -49,6 +55,22 @@ def cheese_heading(transcript: str):
     return None
 
 
+CHEESE_RM_SET = {
+    "hostile",
+    "turret",
+    "system",
+    "cluster",
+    "weapon",
+    "weaponry",
+    "device",
+    "unit",
+    "strike",
+    "defence",
+    "defense",
+    "countermeasure",
+}
+
+
 def cheese_transcript(transcript: str):
     """Remove words that often trip up the model."""
     if not ENABLE_CHEESE:
@@ -61,11 +83,31 @@ def cheese_transcript(transcript: str):
             w, p = w[:-1], w[-1]
         if len(w) < 3:
             arr += f" {word}"
-        elif w not in CHEESE_SET and not (w[-1] == "s" and w[:-1] in CHEESE_SET):
+        elif w not in CHEESE_RM_SET and not (w[-1] == "s" and w[:-1] in CHEESE_RM_SET):
             arr += f" {word}"
         elif p is not None:
             arr += p
     return arr
+
+
+def cheese_tool_plurality(tool: str):
+    """Auto-correct plurality based on last word."""
+    if tool.endswith(("missile", "jet")):
+        return tool + "s"
+    elif tool.endswith(("missiles", "jets")):
+        return tool
+    elif tool.endswith("ries"):
+        return tool[:-3] + "y"
+    elif tool.endswith("s"):
+        return tool[:-1]
+    return tool
+
+
+def cheese_target_plurality(target: str):
+    """Auto-correct plurality based on last word."""
+    if target.endswith("s"):
+        return target[:-1]
+    return target
 
 
 # NOTE: This didn't work well, so its unused.

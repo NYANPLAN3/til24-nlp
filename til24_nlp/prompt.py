@@ -199,7 +199,7 @@ EXAMPLES = (
         "role": "system",
         "content": 'Above answer correctly discards the unnecessary prefix of "enemy" which is not part of the target\'s appearance.',
     },
-    # Case: plurality.
+    # Case: plurality. # NOTE: IDK WHY THIS ONE EXAMPLE IS THE DEALBREAKER, KEEP IT EVEN WITH THE PLURALITY FIXES.
     {
         "role": "user",
         "content": "Block black, red, and purple missile at two four zero degrees with surface-to-air missiles.",
