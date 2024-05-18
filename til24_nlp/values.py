@@ -5,6 +5,8 @@ __all__ = [
     "MODEL_PATH",
     "EXTRA_EOS_TOKENS",
     "PLACEHOLDER",
+    "CHEESE_SET",
+    "ENABLE_CHEESE",
     "PROMPT_FORMATTER",
 ]
 
@@ -41,6 +43,7 @@ CHEESE_SET = {
     "defense",
     "countermeasure",
 }
+ENABLE_CHEESE = True
 
 
 MODEL_PATH = "models/bartowski_Phi-3-mini-4k-instruct-exl2"

@@ -1,6 +1,5 @@
 """Types."""
 
-import json
 from typing import List, Literal, TypedDict
 
 from pydantic import BaseModel

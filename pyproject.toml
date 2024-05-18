@@ -7,7 +7,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "<3.12,>=3.10"
-rich = "^13.7.1"
 # fastapi = { extras = ["all"], version = "^0.111.0" }
 fastapi-slim = "^0.111.0"
 python-dotenv = "^1.0.1"
@@ -33,6 +32,7 @@ exllamav2 = [
   #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
   #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
 ]
+rich = "^13.7.1"
 
 [tool.poetry.group.flash]
 optional = true

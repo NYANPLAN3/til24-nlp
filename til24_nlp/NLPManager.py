@@ -3,19 +3,17 @@
 import logging
 import re
 import time
-from typing import Tuple
 
 from exllamav2.generator import ExLlamaV2Sampler
 from exllamav2.generator.filters import ExLlamaV2PrefixFilter
 from lmformatenforcer import JsonSchemaParser
 from lmformatenforcer.integrations.exllamav2 import ExLlamaV2TokenEnforcerFilter
-from word2number.w2n import word_to_num
 
+from .cheese import cheese_heading, cheese_transcript
 from .exl2 import load_exl2_model_dir, stream_generate
 from .prompt import EXAMPLES, SYS_PROMPT
 from .structs import Command, CommandJSON
 from .values import (
-    CHEESE_SET,
     EXTRA_EOS_TOKENS,
     JH_SAMPLING,
     MODEL_PATH,
@@ -26,55 +24,6 @@ from .values import (
 __all__ = ["NLPManager"]
 
 log = logging.getLogger(__name__)
-
-
-def check_digit(word: str) -> Tuple[bool, int | None]:
-    # handle edge case "niner"
-    if word == "niner":
-        return True, 9
-    try:
-        n = word_to_num(word)
-    except:
-        return False, None
-    if len(str(n)) == 1:
-        return True, int(n)
-    return False, None
-
-
-def cheese_heading(transcript: str):
-    streak = []
-    words = re.sub(r"[^a-z0-9]", " ", transcript.lower()).split()
-    for word in words:
-        is_digit, n = check_digit(word)
-        # Sequence too long
-        if is_digit and len(streak) == 3:
-            streak = []
-            continue
-        elif is_digit:
-            streak.append(str(n))
-        elif len(streak) == 3:
-            break
-        # TODO: Skip/filter stopwords like "uhhh" which may break up the streak.
-        else:
-            streak = []
-    if len(streak) == 3:
-        return "".join(streak)
-    return None
-
-
-def cheese_transcript(transcript: str):
-    arr = ""
-    for word in transcript.split():
-        w, p = word.lower(), None
-        if not w[-1].isalpha():  # Last char might be punctuation.
-            w, p = w[:-1], w[-1]
-        if len(w) < 3:
-            arr += f" {word}"
-        elif w not in CHEESE_SET and not (w[-1] == "s" and w[:-1] in CHEESE_SET):
-            arr += f" {word}"
-        elif p is not None:
-            arr += p
-    return arr
 
 
 class NLPManager:
@@ -120,7 +69,6 @@ class NLPManager:
             log.info(f"Pre-process: {dur_pre:.2f} s")
 
         # Processing.
-        # raw = await asyncio.to_thread(stream_generate, prompt, generator, sampling)
         raw = stream_generate(
             prompt, self.generator, self.sampling, pre_toks=self.pre_toks
         )
@@ -142,19 +90,6 @@ class NLPManager:
         target = obj.target.strip().lower()
         # colors = [color.strip().lower() for color in obj.target_colors]
 
-        # resp = {}
-        # resp["heading"] = heading
-        # resp["tool"] = tool if tool.isupper() else tool.lower()  # handle EMP
-        # if len(colors) == 0:
-        #     resp["target"] = target
-        # elif len(colors) == 1:
-        #     resp["target"] = f"{colors[0]} {target}"
-        # elif len(colors) == 2:
-        #     resp["target"] = f"{colors[0]} and {colors[1]} {target}"
-        # else:
-        #     resp["target"] = f"{', '.join(colors[:-1])}, and {colors[-1]} {target}"
-
-        # CHEESE HEADING
         cheese = cheese_heading(transcript)
         heading = heading if cheese is None else cheese
 
