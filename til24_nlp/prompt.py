@@ -53,6 +53,7 @@ def _ans(heading: str, tool: str, target: str):
     return pp_json(o)
 
 
+# fmt: off
 case_verbatim_1 = _example(
     "Engage target one, silver, green, and orange cargo aircraft with EMP countermeasure. Heading zero zero seven over.",
     _ans("007", "EMP", "silver, green, and orange cargo aircraft"),
@@ -94,8 +95,8 @@ case_suffix_3 = _example(
     'Above answer correctly discards the unnecessary suffix of "fire".',
 )
 case_prefix_1 = _example(
-    "Control tower to interceptor jets, scramble immediately. We have an enemy blue, black, and silver cargo aircraft on heading three zero five. Engage and intercept the target. Over.",
-    _ans("305", "interceptor jets", "blue, black, and silver cargo aircraft"),
+    "Control tower to interceptor jets, scramble immediately. We have an enemy blue, black, and silver camouflage cargo aircraft on heading three zero five. Engage and intercept the target. Over.",
+    _ans("305", "interceptor jets", "blue, black, and silver camouflage cargo aircraft"),
     'Above answer correctly discards the unnecessary prefix of "enemy" which is not part of the target\'s appearance.',
 )
 case_plurality_1 = _example(
@@ -103,6 +104,7 @@ case_plurality_1 = _example(
     _ans("240", "surface-to-air missiles", "black, red, and purple missile"),
     'Above answer correctly maintains the plurality of "surface-to-air missiles".',
 )
+# fmt: on
 
 
 EXAMPLES = (

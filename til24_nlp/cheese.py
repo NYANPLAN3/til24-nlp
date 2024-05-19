@@ -76,18 +76,18 @@ def cheese_filter_transcript(transcript: str):
     if not ENABLE_RISKY_CHEESE or not ENABLE_CHEESE_FILTER_TRANSCRIPT:
         return transcript
 
-    arr = ""
+    out = ""
     for word in transcript.split():
         w, p = word.lower(), None
         if not w[-1].isalpha():  # Last char might be punctuation.
             w, p = w[:-1], w[-1]
         if len(w) < 3:
-            arr += f" {word}"
+            out += f" {word}" if len(out) > 0 else word
         elif w not in FILTER_SET and not (w[-1] == "s" and w[:-1] in FILTER_SET):
-            arr += f" {word}"
-        elif p is not None:
-            arr += p
-    return arr
+            out += f" {word}" if len(out) > 0 else word
+        elif p is not None and len(out) > 0:  # Don't add punc if 1st word.
+            out += p
+    return out
 
 
 def cheese_tool_plurality(tool: str):
