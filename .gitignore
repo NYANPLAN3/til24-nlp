@@ -163,6 +163,7 @@ cython_debug/
 # others
 /results
 /data
+/whl
 /models/*
 !/models/.keep
 requirements.txt

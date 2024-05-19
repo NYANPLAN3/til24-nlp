@@ -59,7 +59,7 @@ publish = "docker push asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-
 requirements = "poetry export -o requirements.txt --without-hashes"
 
 [tool.poe.tasks.build]
-cmd = """docker build -f Dockerfile . \
+cmd = """docker build -f Dockerfile.precompiled . \
   -t nyanplan3-nlp:latest \
   -t asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-nyanplan3/nyanplan3-nlp:latest \
   -t nyanplan3-nlp:${tag} \
