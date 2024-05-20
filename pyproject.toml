@@ -7,32 +7,28 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "<3.12,>=3.10"
-# fastapi = { extras = ["all"], version = "^0.111.0" }
-fastapi-slim = "^0.111.0"
 python-dotenv = "^1.0.1"
-tokenizers = "^0.19.1"
-lm-format-enforcer = "^0.10.1"
+fastapi-slim = "^0.111.0"
 uvicorn = "^0.29.0"
 uvloop = "^0.19.0"
-word2number = "^1.1"
 httptools = "^0.6.1"
+tokenizers = "^0.19.1"
+lm-format-enforcer = "^0.10.1"
+word2number = "^1.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"
 poethepoet = "*"
+rich = "^13.7.1"
+ipykernel = "^6.29.4"
 rouge-score = "^0.1.2"
 pandas = "^2.2.2"
 requests = "^2.31.0"
-ipykernel = "^6.29.4"
-#torch = { version = "^2.3.0", source = "cu118" }
-torch = { version = "^2.3.0", source = "PyPI" }
+torch = "^2.3.0"
 exllamav2 = [
   { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
   { url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu121-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
-  #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
-  #{ url = "https://github.com/turboderp/exllamav2/releases/download/v0.0.21/exllamav2-0.0.21+cu118-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
 ]
-rich = "^13.7.1"
 
 [tool.poetry.group.flash]
 optional = true
@@ -43,12 +39,6 @@ flash-attn = [
   { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp311-cp311-linux_x86_64.whl", python = "3.11.*" },
   { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl", python = "3.10.*" },
 ]
-
-[[tool.poetry.source]]
-name = "cu118"
-url = "https://download.pytorch.org/whl/cu118/"
-#priority = "supplemental"
-priority = "explicit"
 
 [tool.poe.tasks]
 # use_exec for some tasks to avoid hangs on SIGINT.

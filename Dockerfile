@@ -31,7 +31,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
   pip install -U pip
 RUN --mount=type=bind,from=build,source=/whl,target=/whl \
-  pip install /whl/*
+  pip install --no-cache-dir /whl/*
 
 WORKDIR /app
 COPY --link models ./models
