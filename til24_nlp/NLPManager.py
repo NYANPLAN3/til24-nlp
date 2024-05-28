@@ -9,12 +9,7 @@ from exllamav2.generator.filters import ExLlamaV2PrefixFilter
 from lmformatenforcer import JsonSchemaParser
 from lmformatenforcer.integrations.exllamav2 import ExLlamaV2TokenEnforcerFilter
 
-from .cheese import (
-    cheese_filter_transcript,
-    cheese_heading,
-    cheese_target_plurality,
-    cheese_tool_plurality,
-)
+from .cheese import postprocess, preprocess
 from .exl2 import load_exl2_model_dir, stream_generate
 from .prompt import EXAMPLES, SYS_PROMPT
 from .structs import CheeseCommand, Command, CommandJSON
@@ -70,7 +65,7 @@ class NLPManager:
         """Extract JSON command."""
         # Pre-processing.
         t_pre_start = time.time()
-        transcript = cheese_filter_transcript(transcript)
+        transcript = preprocess(transcript)
         prompt = PROMPT_FORMATTER({"role": "user", "content": transcript}, is_last=True)
         dur_pre = time.time() - t_pre_start
         if dur_pre > 0.01:
@@ -82,9 +77,8 @@ class NLPManager:
         )
         t_post_start = time.time()
 
-        raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros
-
         try:
+            raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros
             obj = CMD_CLS.model_validate_json(raw)
         except Exception as e:
             # raise e
@@ -97,26 +91,12 @@ class NLPManager:
             )
 
         # Post-processing.
-        heading = f"{int(''.join(c for c in obj.heading if c.isnumeric())):03d}"[-3:]
-        tool = obj.tool.strip()
-        tool = tool if tool.isupper() else tool.lower()  # handle EMP
-        target = obj.target.strip().lower()
-        # colors = [color.strip().lower() for color in obj.target_colors]
-
-        cheese = cheese_heading(transcript)
-        heading = heading if cheese is None else cheese
-        tool = cheese_tool_plurality(tool)
-        target = cheese_target_plurality(target)
-
+        cmd_dict = postprocess(transcript, obj)
         dur_post = time.time() - t_post_start
         if dur_post > 0.01:
             log.info(f"Post-process: {dur_post:.2f} s")
 
-        return {
-            "heading": heading,
-            "tool": tool,
-            "target": target,
-        }
+        return cmd_dict
 
 
 if __name__ == "__main__":

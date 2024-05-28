@@ -5,6 +5,7 @@ from typing import Tuple
 
 from word2number.w2n import word_to_num
 
+from .structs import Command, CommandJSON
 from .values import *
 
 __all__ = [
@@ -13,6 +14,8 @@ __all__ = [
     "cheese_tool_plurality",
     "cheese_target_plurality",
     "target_from_colors",
+    "preprocess",
+    "postprocess",
 ]
 
 
@@ -128,3 +131,24 @@ def target_from_colors(colors: list[str], target: str) -> str:
     if len(colors) == 2:
         return f"{colors[0]} and {colors[1]} {target}"
     return f"{', '.join(colors[:-1])}, and {colors[-1]} {target}"
+
+
+def preprocess(transcript: str):
+    """Preprocess transcript."""
+    transcript = cheese_filter_transcript(transcript)
+    return transcript
+
+
+def postprocess(transcript: str, obj: Command):
+    """Postprocess transcript."""
+    heading = f"{int(''.join(c for c in obj.heading if c.isnumeric())):03d}"[-3:]
+    tool = obj.tool.strip()
+    tool = tool if tool.isupper() else tool.lower()  # handle EMP
+    target = obj.target.strip().lower()
+    # colors = [color.strip().lower() for color in obj.target_colors]
+
+    cheese = cheese_heading(transcript)
+    heading = heading if cheese is None else cheese
+    tool = cheese_tool_plurality(tool)
+    target = cheese_target_plurality(target)
+    return CommandJSON(heading, tool, target)
