@@ -35,7 +35,7 @@ poe publish
 Finally, to submit the image (must be done on GCP unfortunately).
 
 ```sh
-gcloud ai models upload --region asia-southeast1 --display-name 'nyanplan3-nlp' --container-image-uri asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-nyanplan3/nyanplan3-nlp:latest --container-health-route /health --container-predict-route /extract --container-ports 5002 --version-aliases default
+gcloud ai models upload --region asia-southeast1 --display-name 'nyanplan3-nlp' --container-image-uri asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-nyanplan3/nyanplan3-nlp:finals --container-health-route /health --container-predict-route /extract --container-ports 5002 --version-aliases default
 ```
 
 ## PyTorch Slim
