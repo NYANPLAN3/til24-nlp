@@ -43,7 +43,7 @@ flash-attn = [
 [tool.poe.tasks]
 # use_exec for some tasks to avoid hangs on SIGINT.
 dev = { cmd = "python dev.py", use_exec = true }
-prod = { cmd = "docker run --rm --gpus all -p 5002:5002 nyanplan3-nlp:latest", use_exec = true }
+prod = { cmd = "docker run --rm --gpus all -it -p 5002:5002 nyanplan3-nlp:latest", use_exec = true }
 test = "python eval/test_nlp.py"
 publish = "docker push -a asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-nyanplan3/nyanplan3-nlp"
 requirements = "poetry export -o requirements.txt --without-hashes"
