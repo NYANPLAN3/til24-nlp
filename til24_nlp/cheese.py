@@ -151,4 +151,8 @@ def postprocess(transcript: str, obj: Command):
     heading = heading if cheese is None else cheese
     tool = cheese_tool_plurality(tool)
     target = cheese_target_plurality(target)
-    return CommandJSON(heading, tool, target)
+    return CommandJSON(
+        heading=heading,
+        tool=tool,
+        target=target,
+    )
