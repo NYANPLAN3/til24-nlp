@@ -32,15 +32,16 @@ JH_SAMPLING = dict(
     token_repetition_penalty=1.0,  # 1 = no penalty
 )
 
-DEBUG_PREVIEW = False
+DEBUG_PREVIEW = True
 
 # Enable/disable all risky cheeses.
-ENABLE_RISKY_CHEESE = True
+ENABLE_RISKY_CHEESE = False
 
 # Enable/disable individual risky cheeses.
 ENABLE_CHEESE_HEADING = True
 ENABLE_CHEESE_SKIP_HEADING = True
 ENABLE_CHEESE_FILTER_TRANSCRIPT = True
+
 
 # Disable safe cheeses.
 DISABLE_CHEESE_PLURALITY = False

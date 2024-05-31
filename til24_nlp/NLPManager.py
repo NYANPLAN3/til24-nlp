@@ -124,3 +124,5 @@ if __name__ == "__main__":
             with open("mycsvfile.csv", "w", newline="") as f:
                 w = csv.writer(f)
                 w.writerow(failed_list)
+   
+
