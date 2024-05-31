@@ -35,7 +35,7 @@ JH_SAMPLING = dict(
 DEBUG_PREVIEW = False
 
 # Enable/disable all risky cheeses.
-ENABLE_RISKY_CHEESE = True
+ENABLE_RISKY_CHEESE = False
 
 # Enable/disable individual risky cheeses.
 ENABLE_CHEESE_HEADING = True
