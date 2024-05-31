@@ -11,14 +11,11 @@ import sys
 
 from fastapi import FastAPI, Request
 
-from .log import setup_logging
 from .NLPManager import NLPManager
 from .values import PLACEHOLDER
 
 __all__ = ["create_app"]
 
-
-setup_logging()
 log = logging.getLogger(__name__)
 
 

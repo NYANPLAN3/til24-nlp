@@ -12,9 +12,8 @@ CMD_CLS = CheeseCommand if ENABLE_CHEESE_SKIP_HEADING else Command
 # NOTE: JSON schema tends to confuse models unless you give examples. Perhaps, giving
 # solely examples is better.
 SYS_PROMPT = (
-    "Your job is to convert audio transcripts into computer-parsable data for a ",
+    "Your job is to convert transcripts into computer-parsable data for a ",
     "turret which has multiple tools. ",
-
     # "The audio transcripts are low quality due to background noise and radio static, hence use your expertise to fill in the gaps. ",
     "For each transcript, extract the following information ad verbatim:\n",
     (
@@ -79,6 +78,7 @@ case_verbatim_5 = _example(
     _ans("200", "light machine gun", "green and red zombie"),
     'Above answer correctly extracts "light machine gun" ad verbatim instead of replacing it with "LMG".',
 )
+
 case_suffix_1 = _example(
     "Activate machine gun turret, target the hostile yellow, white, and orange fighter plane heading two niner five. Engage at will.",
     _ans("295", "machine gun", "yellow, white, and orange fighter plane"),
@@ -104,6 +104,7 @@ case_plurality_1 = _example(
     _ans("240", "surface-to-air missiles", "black, red, and purple missile"),
     'Above answer correctly maintains the plurality of "surface-to-air missiles".',
 )
+
 # fmt: on
 
 
@@ -119,4 +120,5 @@ EXAMPLES = (
     *case_prefix_1,
     # NOTE: THIS EXAMPLE IS A DEALBREAKER IDK WHY. KEEP IT LAST INSPITE OF PLURALITY FIX.
     *case_plurality_1,
+
 )
