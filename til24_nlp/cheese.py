@@ -67,7 +67,6 @@ FILTER_SET = {
     "weaponry",
     "device",
     "unit",
-    "strike",
     "defence",
     "defense",
     "countermeasure",

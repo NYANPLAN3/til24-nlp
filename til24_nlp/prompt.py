@@ -11,9 +11,10 @@ CMD_CLS = CheeseCommand if ENABLE_CHEESE_SKIP_HEADING else Command
 # TODO: Consider CoT or other pre-prompt techniques? Effect on speed...
 # NOTE: JSON schema tends to confuse models unless you give examples. Perhaps, giving
 # solely examples is better.
+# NOTE: Explicitly specify you are an air defense turret to prevent the model from thinking it is the tool.
 SYS_PROMPT = (
-    "Your job is to convert audio transcripts into computer-parsable data for a ",
-    "turret which has multiple tools at its disposal. ",
+    "Your job is to convert audio transcripts into computer-parsable data for an ",
+    "air defense turret that can use a variety of tools. ",
     # "The audio transcripts are low quality due to background noise and radio static, hence use your expertise to fill in the gaps. ",
     "For each transcript, extract the following information ad verbatim:\n",
     (
@@ -55,6 +56,11 @@ def _ans(heading: int, tool: str, target: str):
 
 
 # fmt: off
+case_take_early_1 = _example(
+    "Execute precision military strike with electromagnetic pulse on purple and silver commercial aircraft at heading three four five. Deploying EMP now.",
+    _ans(345, "electromagnetic pulse", "purple and silver commercial aircraft"),
+    'Above answer correctly specifies the first instance of the tool.',
+)
 case_verbatim_1 = _example(
     "Engage target one, silver, green, and orange cargo aircraft with EMP countermeasure. Heading zero zero seven over.",
     _ans(7, "EMP", "silver, green, and orange cargo aircraft"),
@@ -100,6 +106,16 @@ case_prefix_1 = _example(
     _ans(305, "interceptor jets", "blue, black, and silver camouflage cargo aircraft"),
     'Above answer correctly discards the unnecessary prefix of "enemy" which is not part of the target\'s appearance.',
 )
+case_misheard_1 = _example(
+    "Set heading two two niner two, target the red and blue submarine and deploy torpedo turret.",
+    _ans(292, "torpedo", "red and blue submarine"),
+    'Above answer correctly infers that "Set heading to two niner two" was misheard as "Set heading two two niner two".',
+)
+case_misheard_2 = _example(
+    "Set heading two niner two two target the yellow and pink camouflage commercial aircrafts with machine gun weapon.",
+    _ans(292, "machine gun", "yellow and pink camouflage commercial aircraft"),
+    'Above answer correctly infers that "Set heading two niner two to target" was misheard as "Set heading two two niner two target".',
+)
 case_plurality_1 = _example(
     "Block black, red, and purple missile at two four zero degrees with surface-to-air missiles.",
     _ans(240, "surface-to-air missiles", "black, red, and purple missile"),
@@ -109,6 +125,7 @@ case_plurality_1 = _example(
 
 
 EXAMPLES = (
+    # *case_take_early_1,
     *case_verbatim_1,
     *case_verbatim_2,
     *case_verbatim_3,
@@ -118,6 +135,8 @@ EXAMPLES = (
     *case_suffix_2,
     *case_suffix_3,
     *case_prefix_1,
+    *case_misheard_1,
+    *case_misheard_2,
     # NOTE: THIS EXAMPLE IS A DEALBREAKER IDK WHY. KEEP IT LAST INSPITE OF PLURALITY FIX.
     *case_plurality_1,
 )

@@ -44,7 +44,7 @@ ENABLE_RISKY_CHEESE = True
 
 # Enable/disable individual risky cheeses.
 ENABLE_CHEESE_HEADING = True
-ENABLE_CHEESE_SKIP_HEADING = True
+ENABLE_CHEESE_SKIP_HEADING = False
 ENABLE_CHEESE_FILTER_TRANSCRIPT = True
 
 # Disable safe cheeses.
