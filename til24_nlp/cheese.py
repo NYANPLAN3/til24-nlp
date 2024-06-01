@@ -62,6 +62,7 @@ FILTER_SET = {
     "hostile",
     "turret",
     "system",
+    "strike",
     "cluster",
     "weapon",
     "weaponry",
