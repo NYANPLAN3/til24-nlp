@@ -24,9 +24,6 @@ __all__ = ["load_exl2_model_dir", "stream_generate"]
 
 log = logging.getLogger(__name__)
 
-log.info(f"Flash Attention: {has_flash_attn}")
-# NOTE: T4 doesn't support flash attention.
-# assert has_flash_attn, "Oh? The eval instance doesn't have flash attention? Debug time."
 
 # Examples used:
 # https://github.com/turboderp/exllamav2/blob/master/examples/lm_format_enforcer.py
@@ -41,6 +38,10 @@ def load_exl2_model_dir(
 ):
     """Load exllamav2 model from model directory."""
     dir = dir if isinstance(dir, str) else str(dir)
+
+    # NOTE: T4 doesn't support flash attention.
+    # assert has_flash_attn, "Oh? The eval instance doesn't have flash attention? Debug time."
+    log.info(f"Flash Attention: {has_flash_attn}")
     log.info(f"Loading exllamav2 model at {dir}")
 
     cfg = ExLlamaV2Config(dir)
