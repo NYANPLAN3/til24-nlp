@@ -13,6 +13,7 @@ __all__ = [
     "PROMPT_FORMATTER",
 ]
 
+from .models.granite import GRANITE_EOS_IDS, granite_prompt_formatter
 from .models.llama3 import LLAMA3_EOS_IDS, llama3_prompt_formatter
 from .models.phi3 import PHI3_EOS_IDS, phi3_prompt_formatter
 
@@ -49,6 +50,10 @@ DISABLE_CHEESE_PLURALITY = False
 MODEL_PATH = "models/bartowski_Phi-3-mini-4k-instruct-exl2"
 EXTRA_EOS_TOKENS = PHI3_EOS_IDS
 PROMPT_FORMATTER = phi3_prompt_formatter
+
+# MODEL_PATH = "models/Interpause_granite-3b-code-instruct-exl2"
+# EXTRA_EOS_TOKENS = GRANITE_EOS_IDS
+# PROMPT_FORMATTER = granite_prompt_formatter
 
 # MODEL_PATH = "models/bartowski_Meta-Llama-3-8B-Instruct-exl2"
 # EXTRA_EOS_TOKENS = LLAMA3_EOS_IDS
