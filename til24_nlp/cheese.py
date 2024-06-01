@@ -136,8 +136,10 @@ def target_from_colors(colors: list[str], target: str) -> str:
 def preprocess(transcript: str):
     """Preprocess transcript."""
     transcript = cheese_filter_transcript(transcript)
-    transcript = transcript.replace("electromagnetic pulse (EMP)", "EMP")
-    transcript = transcript.replace("EMP missile", "EMP")
+    if ENABLE_CHEESE_HARD_CASES:
+        transcript = transcript.replace("electromagnetic pulse (EMP)", "EMP")
+        transcript = transcript.replace("EMP missiles", "EMP")
+        transcript = transcript.replace("EMP missile", "EMP")
     return transcript
 
 
