@@ -70,6 +70,7 @@ def stream_generate(
     prompt: str,
     generator: ExLlamaV2StreamingGenerator,
     sampling: ExLlamaV2Sampler.Settings,
+    filters=None,
     max_new_tokens: int = 256,
     preview: bool = DEBUG_PREVIEW,
     pre_toks: torch.Tensor | None = None,
@@ -84,7 +85,8 @@ def stream_generate(
     in_ids = tokenizer.encode(prompt, encode_special_tokens=pre_toks is None)
     if pre_toks is not None:
         in_ids = torch.cat((pre_toks, in_ids), dim=-1)
-    generator.begin_stream_ex(in_ids, sampling)
+    generator.begin_stream_ex(
+        in_ids, sampling, filters=filters, filter_prefer_eos=True)
 
     t_stream_start = time.time()
     result = []

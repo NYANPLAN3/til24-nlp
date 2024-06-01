@@ -13,6 +13,8 @@ __all__ = [
     "PROMPT_FORMATTER",
 ]
 
+from exllamav2.generator import ExLlamaV2Sampler
+
 from .models.granite import GRANITE_EOS_IDS, granite_prompt_formatter
 from .models.llama3 import LLAMA3_EOS_IDS, llama3_prompt_formatter
 from .models.phi3 import PHI3_EOS_IDS, phi3_prompt_formatter
@@ -25,13 +27,14 @@ PLACEHOLDER = {
 
 # TODO: Consider contrastive/tree/branch sampling? How?
 # See ExLlamaV2Sampler.Settings().
-JH_SAMPLING = dict(
-    temperature=0.05,  # 0.7 # NOTE: avoid too small in case of NaN
-    # temperature_last=True,
-    top_k=50,
-    top_p=1.0,
-    token_repetition_penalty=1.0,  # 1 = no penalty
-)
+# JH_SAMPLING = dict(
+#     temperature=0,  # 0.7 # NOTE: avoid too small in case of NaN
+#     # temperature_last=True,
+#     top_k=50,
+#     top_p=1.0,
+#     token_repetition_penalty=1.0,  # 1 = no penalty
+# )
+JH_SAMPLING = ExLlamaV2Sampler.Settings.greedy()
 
 DEBUG_PREVIEW = False
 

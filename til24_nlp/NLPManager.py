@@ -38,18 +38,9 @@ class NLPManager:
 
         generator = load_exl2_model_dir(MODEL_PATH)
         model, tokenizer = generator.model, generator.tokenizer
-        generator.set_stop_conditions([tokenizer.eos_token_id, *EXTRA_EOS_TOKENS])
-        sampling = ExLlamaV2Sampler.Settings(
-            **JH_SAMPLING,
-            filters=[
-                ExLlamaV2PrefixFilter(model, tokenizer, '{"'),
-                # ExLlamaV2PrefixFilter(model, tokenizer, '{\n'),
-                ExLlamaV2TokenEnforcerFilter(parser, tokenizer),
-            ],
-        )
-        # idk what dataclass bug causes this not to be picked up.
-        sampling.filter_prefer_eos = True
-
+        generator.set_stop_conditions(
+            [tokenizer.eos_token_id, *EXTRA_EOS_TOKENS])
+        sampling = JH_SAMPLING
         preprompt = PROMPT_FORMATTER(
             {"role": "system", "content": SYS_PROMPT},
             *EXAMPLES,
@@ -58,6 +49,11 @@ class NLPManager:
 
         self.generator = generator
         self.sampling = sampling
+        self.filters = [
+            ExLlamaV2PrefixFilter(model, tokenizer, '{"'),
+            # ExLlamaV2PrefixFilter(model, tokenizer, '{\n'),
+            ExLlamaV2TokenEnforcerFilter(parser, tokenizer),
+        ]
         self.pre_toks = tokenizer.encode(preprompt, encode_special_tokens=True)
         # print(np.array2string(self.pre_toks.numpy()[0], threshold=np.inf))
 
@@ -66,14 +62,15 @@ class NLPManager:
         # Pre-processing.
         t_pre_start = time.time()
         transcript = preprocess(transcript)
-        prompt = PROMPT_FORMATTER({"role": "user", "content": transcript}, is_last=True)
+        prompt = PROMPT_FORMATTER(
+            {"role": "user", "content": transcript}, is_last=True)
         dur_pre = time.time() - t_pre_start
         if dur_pre > 0.01:
             log.info(f"Pre-process: {dur_pre:.2f} s")
 
         # Processing.
         raw = stream_generate(
-            prompt, self.generator, self.sampling, pre_toks=self.pre_toks
+            prompt, self.generator, self.sampling, filters=self.filters, pre_toks=self.pre_toks
         )
         t_post_start = time.time()
 
