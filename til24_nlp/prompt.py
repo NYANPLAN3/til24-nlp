@@ -19,7 +19,7 @@ SYS_PROMPT = (
     (
         ""
         if ENABLE_CHEESE_SKIP_HEADING
-        else '- "heading" (str): direction to aim as an integer from "000" to "360".\n'
+        else '- "heading" (str): direction to aim as an integer from "0;0;0" to "3;6;0".\n'
     ),
     '- "tool" (str): tool to use.\n',
     '- "target" (str): target\'s type and colours.\n',
@@ -45,7 +45,9 @@ def _example(qn: str, ans: str, reason: str):
     )
 
 
-def _ans(heading: str, tool: str, target: str):
+def _ans(heading: int, tool: str, target: str):
+    heading = f"{heading:03d}"
+    heading = ";".join(heading)
     o = dict(heading=heading, tool=tool, target=target)
     if ENABLE_CHEESE_SKIP_HEADING:
         o.pop("heading")
@@ -55,52 +57,52 @@ def _ans(heading: str, tool: str, target: str):
 # fmt: off
 case_verbatim_1 = _example(
     "Engage target one, silver, green, and orange cargo aircraft with EMP countermeasure. Heading zero zero seven over.",
-    _ans("007", "EMP", "silver, green, and orange cargo aircraft"),
+    _ans(7, "EMP", "silver, green, and orange cargo aircraft"),
     'Above answer correctly extracts "EMP" ad verbatim instead of replacing it with "electromagnetic pulse".',
 )
 case_verbatim_2 = _example(
     "Turret, lock onto target, unfriendly silver and yellow light aircraft, at three five two. Deploy electromagnetic pulse weapon.",
-    _ans("352", "electromagnetic pulse", "silver and yellow light aircraft"),
+    _ans(352, "electromagnetic pulse", "silver and yellow light aircraft"),
     'Above answer correctly extracts "electromagnetic pulse" ad verbatim instead of replacing it with "EMP".',
 )
 case_verbatim_3 = _example(
     "Shoot green camouflage APC with torpedo system. Heading three one seven over.",
-    _ans("317", "torpedo", "green camouflage APC"),
+    _ans(317, "torpedo", "green camouflage APC"),
     'Above answer correctly extracts "APC" ad verbatim instead of replacing it with "armoured personnel carrier".',
 )
 case_verbatim_4 = _example(
     "Team Alpha, use your LMG to shoot down hostile pink and purple drone cluster at one one three, over.",
-    _ans("113", "LMG", "pink and purple drone"),
+    _ans(113, "LMG", "pink and purple drone"),
     'Above answer correctly extracts "LMG" ad verbatim instead of replacing it with "light machine gun".',
 )
 case_verbatim_5 = _example(
     "Activate light machine gun system, target the dangerous green and red zombie cluster. Heading two zero zero. Engage at will.",
-    _ans("200", "light machine gun", "green and red zombie"),
+    _ans(200, "light machine gun", "green and red zombie"),
     'Above answer correctly extracts "light machine gun" ad verbatim instead of replacing it with "LMG".',
 )
 case_suffix_1 = _example(
     "Activate machine gun turret, target the hostile yellow, white, and orange fighter plane heading two niner five. Engage at will.",
-    _ans("295", "machine gun", "yellow, white, and orange fighter plane"),
+    _ans(295, "machine gun", "yellow, white, and orange fighter plane"),
     'Above answer correctly discards the unnecessary suffix of "system".',
 )
 case_suffix_2 = _example(
     "At one one nine engage red and blue drone cluster with drone catcher.",
-    _ans("119", "drone catcher", "red and blue drone"),
+    _ans(119, "drone catcher", "red and blue drone"),
     'Above answer correctly discards the unnecessary suffix of "cluster".',
 )
 case_suffix_3 = _example(
     "Turret Foxtrot, heading zero niner eight, engage white, yellow, and orange light aircraft with machine gun fire.",
-    _ans("098", "machine gun", "white, yellow, and orange light aircraft"),
+    _ans(98, "machine gun", "white, yellow, and orange light aircraft"),
     'Above answer correctly discards the unnecessary suffix of "fire".',
 )
 case_prefix_1 = _example(
     "Control tower to interceptor jets, scramble immediately. We have an enemy blue, black, and silver camouflage cargo aircraft on heading three zero five. Engage and intercept the target. Over.",
-    _ans("305", "interceptor jets", "blue, black, and silver camouflage cargo aircraft"),
+    _ans(305, "interceptor jets", "blue, black, and silver camouflage cargo aircraft"),
     'Above answer correctly discards the unnecessary prefix of "enemy" which is not part of the target\'s appearance.',
 )
 case_plurality_1 = _example(
     "Block black, red, and purple missile at two four zero degrees with surface-to-air missiles.",
-    _ans("240", "surface-to-air missiles", "black, red, and purple missile"),
+    _ans(240, "surface-to-air missiles", "black, red, and purple missile"),
     'Above answer correctly maintains the plurality of "surface-to-air missiles".',
 )
 # fmt: on

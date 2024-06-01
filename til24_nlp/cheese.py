@@ -143,7 +143,8 @@ def preprocess(transcript: str):
 
 def postprocess(transcript: str, obj: Command):
     """Postprocess transcript."""
-    heading = f"{int(''.join(c for c in obj.heading if c.isnumeric())):03d}"[-3:]
+    heading = int(''.join(c for c in obj.heading if c.isnumeric()))
+    heading = f"{heading:03d}"[-3:]
     tool = obj.tool.strip()
     tool = tool if tool.isupper() else tool.lower()  # handle EMP
     target = obj.target.strip().lower()

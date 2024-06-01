@@ -75,7 +75,7 @@ class NLPManager:
         t_post_start = time.time()
 
         try:
-            raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros
+            # raw = re.sub(r"\b0+(\d+)", r"\1", raw)  # remove leading zeros
             obj = CMD_CLS.model_validate_json(raw)
         except Exception as e:
             # raise e
