@@ -15,11 +15,11 @@ httptools = "^0.6.1"
 tokenizers = "^0.19.1"
 lm-format-enforcer = "^0.10.1"
 word2number = "^1.1"
+rich = "^13.7.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"
 poethepoet = "*"
-rich = "^13.7.1"
 ipykernel = "^6.29.4"
 rouge-score = "^0.1.2"
 pandas = "^2.2.2"
