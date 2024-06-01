@@ -116,6 +116,11 @@ case_misheard_2 = _example(
     _ans(292, "machine gun", "yellow and pink camouflage commercial aircraft"),
     'Above answer correctly infers that "Set heading two niner two to target" was misheard as "Set heading two two niner two target".',
 )
+case_misc_1 = _example(
+    "Lock missiles onto orange and purple drone at heading two four zero. Fire anti-air artillery. Engage target now.",
+    _ans(240, "anti-air artillery", "orange and purple drone"),
+    'Above answer correctly extracts "anti-air artillery".',
+)
 case_plurality_1 = _example(
     "Block black, red, and purple missile at two four zero degrees with surface-to-air missiles.",
     _ans(240, "surface-to-air missiles", "black, red, and purple missile"),
@@ -137,6 +142,7 @@ EXAMPLES = (
     *case_prefix_1,
     *case_misheard_1,
     *case_misheard_2,
+    *case_misc_1,
     # NOTE: THIS EXAMPLE IS A DEALBREAKER IDK WHY. KEEP IT LAST INSPITE OF PLURALITY FIX.
     *case_plurality_1,
 )
