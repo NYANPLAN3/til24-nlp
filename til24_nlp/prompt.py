@@ -83,7 +83,7 @@ case_verbatim_5 = _example(
 case_suffix_1 = _example(
     "Activate machine gun turret, target the hostile yellow, white, and orange fighter plane heading two niner five. Engage at will.",
     _ans(295, "machine gun", "yellow, white, and orange fighter plane"),
-    'Above answer correctly discards the unnecessary suffix of "system".',
+    'Above answer correctly discards the unnecessary suffix of "turret".',
 )
 case_suffix_2 = _example(
     "At one one nine engage red and blue drone cluster with drone catcher.",
