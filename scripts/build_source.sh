@@ -1,12 +1,16 @@
 #!/bin/bash
 set -e
 
-export EXL2_VERSION=0.0.21
-export PYTORCH_BUILD_VERSION=2.2.2
+export EXL2_VERSION=0.1.1
+export FLASH_ATTN_VERSION=2.5.9
+export PYTORCH_BUILD_VERSION=2.3.0
 export PYTORCH_BUILD_NUMBER=0
 # Cannot be auto-detected during docker build.
-export TORCH_CUDA_ARCH_LIST="7.5 8.9"
+export TORCH_CUDA_ARCH_LIST="7.5 8.6 8.9"
 export CUDA_HOME=/usr/local/cuda
+
+# Limit ninja jobs to avoid OOM.
+export MAX_JOBS=8
 
 # Need curl to download stuff.
 apt-get update
@@ -24,7 +28,7 @@ conda config --set channel_priority flexible
 conda activate
 magma_pkg=$(nvcc --version | sed -ne 's/.*_\([0-9]\+\)\.\([0-9]\+\).*/pytorch::magma-cuda\1\2/p')
 # conda install -y --no-update-deps cmake ninja intel::mkl-static intel::mkl-include $magma_pkg
-conda install -y --no-update-deps cmake ninja $magma_pkg
+conda install -y --no-update-deps cmake ninja packaging wheel setuptools $magma_pkg
 
 # Build & install torch (needed to build exl2).
 mkdir -p /tmp/pytorch
@@ -53,6 +57,13 @@ cd /tmp/exllamav2
 python setup.py install
 cd /
 
+# Build & install flash_attn.
+mkdir -p /tmp/flash_attn
+curl -Ls https://github.com/Dao-AILab/flash-attention/archive/refs/tags/v${FLASH_ATTN_VERSION}.tar.gz | tar --strip-components=1 -xzC /tmp/flash_attn
+cd /tmp/flash_attn
+python setup.py install
+cd /
+
 # Copy all the wheels to /whl and clean up.
 mkdir -p /whl
 cd /tmp/pytorch
@@ -62,4 +73,8 @@ cd /tmp/exllamav2
 python setup.py bdist_wheel
 cp dist/*.whl /whl/
 cd /
-rm -rf /tmp/miniconda3 /tmp/pytorch /tmp/exllamav2
+cd /tmp/flash_attn
+python setup.py bdist_wheel
+cp dist/*.whl /whl/
+cd /
+# rm -rf /tmp/miniconda3 /tmp/pytorch /tmp/exllamav2 /tmp/flash_attn
