@@ -136,6 +136,8 @@ def target_from_colors(colors: list[str], target: str) -> str:
 def preprocess(transcript: str):
     """Preprocess transcript."""
     transcript = cheese_filter_transcript(transcript)
+    transcript = transcript.replace("electromagnetic pulse (EMP)", "EMP")
+    transcript = transcript.replace("EMP missile", "EMP")
     return transcript
 
 
@@ -151,8 +153,4 @@ def postprocess(transcript: str, obj: Command):
     heading = heading if cheese is None else cheese
     tool = cheese_tool_plurality(tool)
     target = cheese_target_plurality(target)
-    return CommandJSON(
-        heading=heading,
-        tool=tool,
-        target=target,
-    )
+    return CommandJSON(heading=heading, tool=tool, target=target)

@@ -13,8 +13,7 @@ CMD_CLS = CheeseCommand if ENABLE_CHEESE_SKIP_HEADING else Command
 # solely examples is better.
 SYS_PROMPT = (
     "Your job is to convert audio transcripts into computer-parsable data for a ",
-    "civilian defence turret which has multiple tools at its disposal. ",
-    "Background noise and radio static may have degraded the audio quality of some transcripts. ",
+    "turret which has multiple tools at its disposal. ",
     # "The audio transcripts are low quality due to background noise and radio static, hence use your expertise to fill in the gaps. ",
     "For each transcript, extract the following information ad verbatim:\n",
     (
