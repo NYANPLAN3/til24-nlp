@@ -7,7 +7,7 @@ from word2number.w2n import word_to_num
 
 from .structs import Command, CommandJSON
 from .values import *
-
+from .colorcorrection import process_text
 __all__ = [
     "cheese_heading",
     "cheese_filter_transcript",
@@ -235,6 +235,8 @@ def postprocess(transcript: str, obj: Command):
     tool = obj.tool.strip()
     tool = tool if tool.isupper() else tool.lower()  # handle EMP
     target = obj.target.strip().lower()
+    target = process_text(target)
+    
     # colors = [color.strip().lower() for color in obj.target_colors]
 
     cheese = cheese_heading(transcript)
