@@ -1,5 +1,6 @@
 """All the cheesy stuff."""
 
+import logging
 import re
 
 from word2number.w2n import word_to_num
@@ -16,6 +17,8 @@ __all__ = [
     "preprocess",
     "postprocess",
 ]
+
+log = logging.getLogger(__name__)
 
 
 def _convert_digit(word: str) -> int | str:
@@ -47,21 +50,39 @@ def cheese_heading(transcript: str):
     seq = "".join(seq)  # XXXXXXXX315XXXXXX
 
     # TODO: Skip/filter stopwords like "uhhh" which may break up the streak.
+    heading = None
 
     # Case: Perfect 3-streak
     if m := re.search(r"(?<!\d)(\d\d\d)(?!\d)", seq):
-        return m.group(1)
+        heading = m.group(1)
 
     # Case: "to \d\d\d"
-    if m := re.search(r"(?<!\d)2(\d\d\d)(?!\d)", seq):
-        return m.group(1)
+    elif m := re.search(r"(?<!\d)2(\d\d\d)(?!\d)", seq):
+        heading = m.group(1)
     # Case: "\d\d\d to"
-    if m := re.search(r"(?<!\d)(\d\d\d)2(?!\d)", seq):
-        return m.group(1)
+    elif m := re.search(r"(?<!\d)(\d\d\d)2(?!\d)", seq):
+        heading = m.group(1)
+
+    # Case: "for \d\d\d"
+    elif m := re.search(r"(?<!\d)4(\d\d\d)(?!\d)", seq):
+        heading = m.group(1)
+    # Case: "\d\d\d for"
+    elif m := re.search(r"(?<!\d)(\d\d\d)4(?!\d)", seq):
+        heading = m.group(1)
 
     # Case: Loose 3-streak
-    if m := re.search(r"\D*(\d\d\d)\D*", seq):
-        return m.group(1)
+    # TODO: for 4-streaks, pick either 111X or X111 depending on which is valid 0 to 360.
+    elif m := re.search(r"\D*(\d\d\d)\D*", seq):
+        heading = m.group(1)
+
+    try:
+        if heading is not None and not (0 <= int(heading) <= 360):
+            return None
+    except:
+        log.error(f"INVALID HEADING: {heading}")
+        return None
+
+    return heading
 
 
 FILTER_SET = {
