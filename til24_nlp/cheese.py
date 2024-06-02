@@ -1,13 +1,17 @@
 """All the cheesy stuff."""
 
 import logging
+import random
 import re
+from itertools import combinations
+from typing import List
 
 from word2number.w2n import word_to_num
 
+from .colorcorrection import process_text
 from .structs import Command, CommandJSON
 from .values import *
-from .colorcorrection import process_text
+
 __all__ = [
     "cheese_heading",
     "cheese_filter_transcript",
@@ -52,95 +56,84 @@ MISHEARD_MAP = {
 }
 
 
+def _valid(h: str):
+    return 0 <= int(h) <= 360
+
+
+def _repair_heading(ori: List[int | str], seq: str, is2=False) -> str | None:
+    ### Cases with too many numbers ###
+    # Case: Perfect 3-streak
+    if m := re.search(r"(?<!\d)(\d{3})(?!\d)", seq):
+        if _valid(h := m.group(1)):
+            return h
+
+    # Case: "to ddd"
+    if m := re.search(r"(?<!\d)2(\d{3})(?!\d)", seq):
+        if _valid(h := m.group(1)):
+            return h
+    # Case: "ddd to"
+    if m := re.search(r"(?<!\d)(\d{3})2(?!\d)", seq):
+        if _valid(h := m.group(1)):
+            return h
+
+    # Case: "for ddd"
+    if m := re.search(r"(?<!\d)4(\d{3})(?!\d)", seq):
+        if _valid(h := m.group(1)):
+            return h
+    # Case: "ddd for"
+    if m := re.search(r"(?<!\d)(\d{3})4(?!\d)", seq):
+        if _valid(h := m.group(1)):
+            return h
+
+    # Case: Perfect 4/5-streak find plausible heading
+    if m := re.search(r"(?<!\d)(\d{4,5})(?!\d)", seq):
+        possible = ["".join(l) for l in combinations(m.group(1), 3)]
+        valid = [h for h in possible if _valid(h)]
+        if len(valid) > 0:
+            return random.choice(valid)
+
+    # Case: Loose 3-streak
+    if m := re.search(r"\D*(\d{3})\D*", seq):
+        if _valid(h := m.group(1)):
+            return h
+
+    ### Cases with too little numbers ###
+    # Case: dXd
+    if m := re.search(r"(?<!\d)(\d)(X)(\d)(?!\d)", seq):
+        if (w := ori[m.start(2)]) in MISHEARD_MAP:
+            if _valid(h := f"{m.group(1)}{MISHEARD_MAP[w]}{m.group(3)}"):
+                return h
+
+    # Case: Xdd
+    if m := re.search(r"(?<!\d)(X)(\d{2})(?!\d)", seq):
+        if (w := ori[m.start(1)]) in MISHEARD_MAP:
+            if _valid(h := f"{MISHEARD_MAP[w]}{m.group(2)}"):
+                return h
+
+    # Case: ddX
+    if m := re.search(r"(?<!\d)(\d{2})(X)(?!\d)", seq):
+        if (w := ori[m.start(2)]) in MISHEARD_MAP:
+            if _valid(h := f"{m.group(1)}{MISHEARD_MAP[w]}"):
+                return h
+
+    # Case: GG
+    if is2:
+        return None  # Give up.
+    rep = [MISHEARD_MAP.get(w, w) for w in ori]
+    repseq = "".join(str(w) if isinstance(w, int) else "X" for w in rep)
+    return _repair_heading(rep, repseq, is2=True)
+
+
 def cheese_heading(transcript: str):
     """Extract heading based off sequence of 3 digits."""
     if not ENABLE_RISKY_CHEESE or not ENABLE_CHEESE_HEADING:
         return None
 
     words = re.sub(r"[^a-z0-9]", " ", transcript.lower()).split()
-    ori = []
-    seq = []
-    for word in words:
-        word_or_n = _convert_digit(word)
-        ori.append(word_or_n)
-        seq.append(str(word_or_n) if isinstance(word_or_n, int) else "X")
-    seq = "".join(seq)  # XXXXXXXX315XXXXXX
+    ori = [_convert_digit(w) for w in words]
+    seq = "".join(str(w) if isinstance(w, int) else "X" for w in ori)
 
-    # TODO: Skip/filter stopwords like "uhhh" which may break up the streak.
-    heading = None
-
-    # Case: Perfect 3-streak
-    if m := re.search(r"(?<!\d)(\d\d\d)(?!\d)", seq):
-        heading = m.group(1)
-
-    # Case: "to \d\d\d"
-    elif m := re.search(r"(?<!\d)2(\d\d\d)(?!\d)", seq):
-        heading = m.group(1)
-    # Case: "\d\d\d to"
-    elif m := re.search(r"(?<!\d)(\d\d\d)2(?!\d)", seq):
-        heading = m.group(1)
-
-    # Case: "for \d\d\d"
-    elif m := re.search(r"(?<!\d)4(\d\d\d)(?!\d)", seq):
-        heading = m.group(1)
-    # Case: "\d\d\d for"
-    elif m := re.search(r"(?<!\d)(\d\d\d)4(?!\d)", seq):
-        heading = m.group(1)
-        
-    #case a 2-streak due to misheard numbers d\x\d
-    elif re.fullmatch(r"[^0-9]*[0-9]?[^0-9]*[0-9]?[^0-9]*", seq):
-        print("The sequence contains less than 3 numbers.")
-        # Second pass of the transcript to replace misheard words
-        replaced_words = []
-        for word in words:
-            if word in MISHEARD_MAP:
-                replaced_words.append(str(MISHEARD_MAP[word]))
-            else:
-                replaced_words.append(word)  
-        ori = []
-        seq = []
-
-        for word in replaced_words:  # Use replaced words in this pass
-            word_or_n = _convert_digit(word)
-            ori.append(word_or_n)
-            seq.append(str(word_or_n) if isinstance(word_or_n, int) else "x")
-
-    
-        seq = "".join(seq)  # Create sequence of digits and x
-
-
-        if re.search(r"\d{4}", seq):  # Check if sequence contains a 4-digit number
-            match = re.search(r"\d{4}", seq).group()
-            if int(match[0])>3: #case of 4dd2 or any misheard number more than 3
-                heading = match[1:]
-            elif match[0] == "2": #case of 2dd4
-                heading = match[1:]
-
-        else:
-            heading = re.search(r"\d{3}", seq).group() # will get smt like x2xx2xxxxx046 but its impossible for 3 consecutive digits to be anywhere else but the heading
- 
-        
-
-    # Case: Loose 3-streak
-    # TODO: for 4-streaks, pick either 111X or X111 depending on which is valid 0 to 360.
-    elif m := re.search(r"\D*(\d\d\d)\D*", seq):
-        heading = m.group(1)
-
-    # NOTE: These cases must come last to avoid gobbling up the above cases.
-    # Case: "\dX\d"
-    elif m := re.search(r"(?<!\d)(\d)(X)(\d)(?!\d)", seq):
-        w = ori[m.start(2)]
-        if w in MISHEARD_MAP:
-            heading = f"{m.group(1)}{MISHEARD_MAP[w]}{m.group(3)}"
-
-    try:
-        if heading is not None and not (0 <= int(heading) <= 360):
-            return None
-    except:
-        log.error(f"INVALID HEADING: {heading}")
-        return None
-
-    return heading
+    return _repair_heading(ori, seq)
 
 
 FILTER_SET = {
@@ -236,7 +229,7 @@ def postprocess(transcript: str, obj: Command):
     tool = tool if tool.isupper() else tool.lower()  # handle EMP
     target = obj.target.strip().lower()
     target = process_text(target)
-    
+
     # colors = [color.strip().lower() for color in obj.target_colors]
 
     cheese = cheese_heading(transcript)
@@ -247,15 +240,12 @@ def postprocess(transcript: str, obj: Command):
 
 
 if __name__ == "__main__":
-    
- 
-    
+
     transcripts = ["Control to turret, prepare to engage red helicopter at heading four zero six five.",
                    "Engage the yellow drone with surface-to-air missiles, heading two two three five.",
                    "Deploy electromagnetic pulse, heading one one zero four turrets on aircraft",
                    "Control to turrets, heading one one zero two engage aircraft with emp now",]
-                   
 
-    for i in range(0,len(transcripts)):
+    for i in range(0, len(transcripts)):
         heading = cheese_heading(transcripts[i])
         print(heading)
