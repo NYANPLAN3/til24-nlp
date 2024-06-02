@@ -86,6 +86,40 @@ def cheese_heading(transcript: str):
     # Case: "\d\d\d for"
     elif m := re.search(r"(?<!\d)(\d\d\d)4(?!\d)", seq):
         heading = m.group(1)
+        
+    #case a 2-streak due to misheard numbers d\x\d
+    elif re.fullmatch(r"[^0-9]*[0-9]?[^0-9]*[0-9]?[^0-9]*", seq):
+        print("The sequence contains less than 3 numbers.")
+        # Second pass of the transcript to replace misheard words
+        replaced_words = []
+        for word in words:
+            if word in MISHEARD_MAP:
+                replaced_words.append(str(MISHEARD_MAP[word]))
+            else:
+                replaced_words.append(word)  
+        ori = []
+        seq = []
+
+        for word in replaced_words:  # Use replaced words in this pass
+            word_or_n = _convert_digit(word)
+            ori.append(word_or_n)
+            seq.append(str(word_or_n) if isinstance(word_or_n, int) else "x")
+
+    
+        seq = "".join(seq)  # Create sequence of digits and x
+
+
+        if re.search(r"\d{4}", seq):  # Check if sequence contains a 4-digit number
+            match = re.search(r"\d{4}", seq).group()
+            if int(match[0])>3: #case of 4dd2 or any misheard number more than 3
+                heading = match[1:]
+            elif match[0] == "2": #case of 2dd4
+                heading = match[1:]
+
+        else:
+            heading = re.search(r"\d{3}", seq).group() # will get smt like x2xx2xxxxx046 but its impossible for 3 consecutive digits to be anywhere else but the heading
+ 
+        
 
     # Case: Loose 3-streak
     # TODO: for 4-streaks, pick either 111X or X111 depending on which is valid 0 to 360.
@@ -208,3 +242,18 @@ def postprocess(transcript: str, obj: Command):
     tool = cheese_tool_plurality(tool)
     target = cheese_target_plurality(target)
     return CommandJSON(heading=heading, tool=tool, target=target)
+
+
+if __name__ == "__main__":
+    
+ 
+    
+    transcripts = ["Control to turret, prepare to engage red helicopter at heading four zero six five.",
+                   "Engage the yellow drone with surface-to-air missiles, heading two two three five.",
+                   "Deploy electromagnetic pulse, heading one one zero four turrets on aircraft",
+                   "Control to turrets, heading one one zero two engage aircraft with emp now",]
+                   
+
+    for i in range(0,len(transcripts)):
+        heading = cheese_heading(transcripts[i])
+        print(heading)
