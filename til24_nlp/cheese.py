@@ -8,7 +8,7 @@ from typing import List
 
 from word2number.w2n import word_to_num
 
-from .colorcorrection import process_text
+from .colorcorrection import replace_misheard_colors
 from .structs import Command, CommandJSON
 from .values import *
 
@@ -238,8 +238,9 @@ def postprocess(transcript: str, obj: Command):
     tool = obj.tool.strip()
     tool = tool if tool.isupper() else tool.lower()  # handle EMP
     target = obj.target.strip().lower()
-    target = process_text(target)
-
+    if COLOR_CORRECTION_ON:
+        target = replace_misheard_colors(target)
+    
     # colors = [color.strip().lower() for color in obj.target_colors]
 
     cheese = cheese_heading(transcript)
