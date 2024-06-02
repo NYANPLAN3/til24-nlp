@@ -116,6 +116,16 @@ def _repair_heading(ori: List[int | str], seq: str, is2=False) -> str | None:
             if _valid(h := f"{m.group(1)}{MISHEARD_MAP[w]}"):
                 return h
 
+    # Case: dXdd
+    if m := re.search(r"(?<!\d)(\d)X(\d{2})(?!\d)", seq):
+        if _valid(h := f"{m.group(1)}{m.group(2)}"):
+            return h
+
+    # Case: ddXd
+    if m := re.search(r"(?<!\d)(\d{2})X(\d)(?!\d)", seq):
+        if _valid(h := f"{m.group(1)}{m.group(2)}"):
+            return h
+
     # Case: GG
     if is2:
         return None  # Give up.
