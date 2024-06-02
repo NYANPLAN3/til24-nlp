@@ -1,7 +1,6 @@
 """All the cheesy stuff."""
 
 import re
-from typing import Tuple
 
 from word2number.w2n import word_to_num
 
@@ -19,18 +18,18 @@ __all__ = [
 ]
 
 
-def check_digit(word: str) -> Tuple[bool, int | None]:
+def _convert_digit(word: str) -> int | str:
     """Check if word is a digit."""
     # handle edge case "niner"
     if word == "niner":
-        return True, 9
+        return 9
     try:
         n = word_to_num(word)
     except:
-        return False, None
+        return word
     if len(str(n)) == 1:
-        return True, int(n)
-    return False, None
+        return int(n)
+    return word
 
 
 def cheese_heading(transcript: str):
@@ -38,24 +37,31 @@ def cheese_heading(transcript: str):
     if not ENABLE_RISKY_CHEESE or not ENABLE_CHEESE_HEADING:
         return None
 
-    streak = []
     words = re.sub(r"[^a-z0-9]", " ", transcript.lower()).split()
+    ori = []
+    seq = []
     for word in words:
-        is_digit, n = check_digit(word)
-        # Sequence too long
-        if is_digit and len(streak) == 3:
-            streak = []
-            continue
-        elif is_digit:
-            streak.append(str(n))
-        elif len(streak) == 3:
-            break
-        # TODO: Skip/filter stopwords like "uhhh" which may break up the streak.
-        else:
-            streak = []
-    if len(streak) == 3:
-        return "".join(streak)
-    return None
+        word_or_n = _convert_digit(word)
+        ori.append(word_or_n)
+        seq.append(str(word_or_n) if isinstance(word_or_n, int) else "X")
+    seq = "".join(seq)  # XXXXXXXX315XXXXXX
+
+    # TODO: Skip/filter stopwords like "uhhh" which may break up the streak.
+
+    # Case: Perfect 3-streak
+    if m := re.search(r"(?<!\d)(\d\d\d)(?!\d)", seq):
+        return m.group(1)
+
+    # Case: "to \d\d\d"
+    if m := re.search(r"(?<!\d)2(\d\d\d)(?!\d)", seq):
+        return m.group(1)
+    # Case: "\d\d\d to"
+    if m := re.search(r"(?<!\d)(\d\d\d)2(?!\d)", seq):
+        return m.group(1)
+
+    # Case: Loose 3-streak
+    if m := re.search(r"\D*(\d\d\d)\D*", seq):
+        return m.group(1)
 
 
 FILTER_SET = {
