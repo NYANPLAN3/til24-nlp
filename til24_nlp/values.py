@@ -15,6 +15,8 @@ __all__ = [
     "PROMPT_FORMATTER",
 ]
 
+import os
+
 from exllamav2.generator import ExLlamaV2Sampler
 
 from .models.granite import GRANITE_EOS_IDS, granite_prompt_formatter
@@ -45,14 +47,14 @@ ENABLE_RISKY_CHEESE = True
 
 # Enable/disable individual risky cheeses.
 ENABLE_CHEESE_HEADING = True
-ENABLE_CHEESE_SKIP_HEADING = False
-ENABLE_CHEESE_FILTER_TRANSCRIPT = True
+ENABLE_CHEESE_SKIP_HEADING = os.getenv(
+    "ENABLE_CHEESE_SKIP_HEADING", "0") == "1"
+ENABLE_CHEESE_FILTER_TRANSCRIPT = os.getenv(
+    "ENABLE_CHEESE_FILTER_TRANSCRIPT", "1") == "1"
 
 # Disable safe cheeses.
 DISABLE_CHEESE_PLURALITY = False
 ENABLE_CHEESE_HARD_CASES = True
-
-
 COLOR_CORRECTION_ON = True
 
 MODEL_PATH = "models/bartowski_Phi-3-mini-4k-instruct-exl2"
