@@ -35,6 +35,23 @@ def _convert_digit(word: str) -> int | str:
     return word
 
 
+MISHEARD_MAP = {
+    "none": 1,
+    "wan": 1,
+    "to": 2,
+    "too": 2,
+    "tree": 3,
+    "for": 4,
+    "fore": 4,
+    "fiver": 5,
+    "sex": 6,
+    "sick": 6,
+    "sever": 7,
+    "ate": 8,
+    "aid": 8,
+}
+
+
 def cheese_heading(transcript: str):
     """Extract heading based off sequence of 3 digits."""
     if not ENABLE_RISKY_CHEESE or not ENABLE_CHEESE_HEADING:
@@ -74,6 +91,13 @@ def cheese_heading(transcript: str):
     # TODO: for 4-streaks, pick either 111X or X111 depending on which is valid 0 to 360.
     elif m := re.search(r"\D*(\d\d\d)\D*", seq):
         heading = m.group(1)
+
+    # NOTE: These cases must come last to avoid gobbling up the above cases.
+    # Case: "\dX\d"
+    elif m := re.search(r"(?<!\d)(\d)(X)(\d)(?!\d)", seq):
+        w = ori[m.start(2)]
+        if w in MISHEARD_MAP:
+            heading = f"{m.group(1)}{MISHEARD_MAP[w]}{m.group(3)}"
 
     try:
         if heading is not None and not (0 <= int(heading) <= 360):
