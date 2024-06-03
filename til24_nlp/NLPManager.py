@@ -45,7 +45,7 @@ class NLPManager:
             {"role": "system", "content": SYS_PROMPT},
             *EXAMPLES,
         )
-        log.info(f"###PRE###\n{preprompt}")
+        # log.info(f"###PRE###\n{preprompt}")
 
         self.generator = generator
         self.sampling = sampling

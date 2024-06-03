@@ -79,4 +79,5 @@ def create_app():
 
         return {"predictions": preds}
 
+    log.info("NLP App Ready.")
     return app

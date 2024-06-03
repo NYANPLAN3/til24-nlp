@@ -46,4 +46,4 @@ COPY --link til24_nlp ./til24_nlp
 EXPOSE 5002
 ENV TORCH_CUDNN_V8_API_ENABLED=1 PYTORCH_CUDA_ALLOC_CONF=backend:cudaMallocAsync CUDA_VISIBLE_DEVICES=0
 # uvicorn --host=0.0.0.0 --port=5002 --factory til24_nlp:create_app
-CMD ["uvicorn", "--host=0.0.0.0", "--port=5002", "--factory", "til24_nlp:create_app"]
+CMD ["uvicorn", "--log-level=warning", "--host=0.0.0.0", "--port=5002", "--factory", "til24_nlp:create_app"]
