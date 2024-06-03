@@ -85,6 +85,7 @@ def _repair_heading(ori: List[int | str], seq: str, is2=False) -> str | None:
         if _valid(h := m.group(1)):
             return h
 
+    # NOTE: 5-streak alr very unlikely, any longer & we risk false positive on adversarial cases like phone numbers.
     # Case: Perfect 4/5-streak find plausible heading
     if m := re.search(r"(?<!\d)(\d{4,5})(?!\d)", seq):
         possible = ["".join(l) for l in combinations(m.group(1), 3)]
@@ -92,10 +93,11 @@ def _repair_heading(ori: List[int | str], seq: str, is2=False) -> str | None:
         if len(valid) > 0:
             return random.choice(valid)
 
+    # NOTE: Disabled else it will false positive for phone number case.
     # Case: Loose 3-streak
-    if m := re.search(r"\D*(\d{3})\D*", seq):
-        if _valid(h := m.group(1)):
-            return h
+    # if m := re.search(r"\D*(\d{3})\D*", seq):
+    #     if _valid(h := m.group(1)):
+    #         return h
 
     ### Cases with too little numbers ###
     # Case: dXd
@@ -143,9 +145,12 @@ def cheese_heading(transcript: str):
     ori = [_convert_digit(w) for w in words]
     seq = "".join(str(w) if isinstance(w, int) else "X" for w in ori)
 
+    # TODO: Is risky, but consider pre-removing number streaks that are too long?
+    # i.e., phone numbers, coordinates, etc.
     return _repair_heading(ori, seq)
 
 
+# TODO: Pretty sure these won't accidentally remove valid answers even for openset, right?
 FILTER_SET = {
     "hostile",
     "turret",
@@ -240,7 +245,7 @@ def postprocess(transcript: str, obj: Command):
     target = obj.target.strip().lower()
     if COLOR_CORRECTION_ON:
         target = replace_misheard_colors(target)
-    
+
     # colors = [color.strip().lower() for color in obj.target_colors]
 
     cheese = cheese_heading(transcript)
