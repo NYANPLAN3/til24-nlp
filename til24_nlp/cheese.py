@@ -236,9 +236,23 @@ def preprocess(transcript: str):
     return transcript
 
 
+# fmt: off
+CORRECTION_MAP = {
+    "jet": ["jetty", "jett", "jit"],
+    "drone": ["throne", "phone"],
+    "plane": ["plank", "pipeline", "jane", "maine", "pane", "pain"],
+    "missile": ["missal", "mistle", "miss hill", "miss sell", "muscle"],
+    "aircraft": ["air craft", "air raft", "ear craft", "hair craft", "care craft", "airshaft", "air shaft"],
+    "helicopter": ["heli copter", "helly copter", "hell o copter", "holy copter", "heli hopper", "telecaster"],
+    "cargo": ["car go", "car glow", "car gold", "car grow", "car goal"],
+    # "commercial": ["commer seal", "comm er cial", "commersial", "commer she al", "comm her cial"],
+}
+# fmt: on
+
+
 def postprocess(transcript: str, obj: Command):
     """Postprocess transcript."""
-    heading = int(''.join(c for c in obj.heading if c.isnumeric()))
+    heading = int("".join(c for c in obj.heading if c.isnumeric()))
     heading = f"{heading:03d}"[-3:]
     tool = obj.tool.strip()
     tool = tool if tool.isupper() else tool.lower()  # handle EMP
@@ -246,7 +260,10 @@ def postprocess(transcript: str, obj: Command):
     if COLOR_CORRECTION_ON:
         target = replace_misheard_colors(target)
 
-    # colors = [color.strip().lower() for color in obj.target_colors]
+    if FIX_TARGET_ON:
+        for correct, wrongs in CORRECTION_MAP.items():
+            for wrong in wrongs:
+                target = re.sub(rf"\b{wrong}\b", correct, target)
 
     cheese = cheese_heading(transcript)
     heading = heading if cheese is None else cheese

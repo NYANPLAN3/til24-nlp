@@ -1,5 +1,7 @@
 """All hardcoded constants."""
 
+# fmt: off
+
 __all__ = [
     "JH_SAMPLING",
     "MODEL_PATH",
@@ -12,6 +14,7 @@ __all__ = [
     "ENABLE_CHEESE_HARD_CASES",
     "DISABLE_CHEESE_PLURALITY",
     "COLOR_CORRECTION_ON",
+    "FIX_TARGET_ON",
     "PROMPT_FORMATTER",
 ]
 
@@ -47,10 +50,10 @@ ENABLE_RISKY_CHEESE = True
 
 # Enable/disable individual risky cheeses.
 ENABLE_CHEESE_HEADING = os.getenv("ENABLE_CHEESE_HEADING", "1") == "1"
-ENABLE_CHEESE_SKIP_HEADING = os.getenv(
-    "ENABLE_CHEESE_SKIP_HEADING", "0") == "1"
-ENABLE_CHEESE_FILTER_TRANSCRIPT = os.getenv(
-    "ENABLE_CHEESE_FILTER_TRANSCRIPT", "1") == "1"
+ENABLE_CHEESE_SKIP_HEADING = os.getenv("ENABLE_CHEESE_SKIP_HEADING", "0") == "1"
+ENABLE_CHEESE_FILTER_TRANSCRIPT = os.getenv("ENABLE_CHEESE_FILTER_TRANSCRIPT", "1") == "1"
+FIX_TARGET_ON = os.getenv("FIX_TARGET_ON", "1") == "1"
+
 
 # Disable safe cheeses.
 DISABLE_CHEESE_PLURALITY = False
