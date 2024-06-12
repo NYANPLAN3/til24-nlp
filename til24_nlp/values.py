@@ -15,6 +15,7 @@ __all__ = [
     "DISABLE_CHEESE_PLURALITY",
     "COLOR_CORRECTION_ON",
     "FIX_TARGET_ON",
+    "FIX_TOOL_ON",
     "PROMPT_FORMATTER",
 ]
 
@@ -53,6 +54,7 @@ ENABLE_CHEESE_HEADING = os.getenv("ENABLE_CHEESE_HEADING", "1") == "1"
 ENABLE_CHEESE_SKIP_HEADING = os.getenv("ENABLE_CHEESE_SKIP_HEADING", "0") == "1"
 ENABLE_CHEESE_FILTER_TRANSCRIPT = os.getenv("ENABLE_CHEESE_FILTER_TRANSCRIPT", "1") == "1"
 FIX_TARGET_ON = os.getenv("FIX_TARGET_ON", "1") == "1"
+FIX_TOOL_ON = os.getenv("FIX_TOOL_ON", "1") == "1"
 
 
 # Disable safe cheeses.

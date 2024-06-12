@@ -209,7 +209,10 @@ def cheese_target_plurality(target: str):
     if DISABLE_CHEESE_PLURALITY:
         return target
 
-    if target.endswith("s"):
+    # NOTE: THE RULES FOR TARGET & TOOL ARE DIFFERENT. ITS ALWAYS SINGULAR HERE.
+    if target.endswith("ries"):
+        return target[:-3] + "y"
+    elif target.endswith("s"):
         return target[:-1]
     return target
 
@@ -237,7 +240,7 @@ def preprocess(transcript: str):
 
 
 # fmt: off
-CORRECTION_MAP = {
+TARGET_CORRECTION_MAP = {
     "jet": ["jetty", "jett", "jit"],
     "drone": ["throne", "phone"],
     "plane": ["plank", "pipeline", "jane", "maine", "pane", "pain"],
@@ -248,6 +251,14 @@ CORRECTION_MAP = {
     # "commercial": ["commer seal", "comm er cial", "commersial", "commer she al", "comm her cial"],
 }
 # fmt: on
+
+TOOL_CORRECTION_MAP = {
+    "gun": ["fun", "run"],
+    "drone": ["throne", "phone"],
+    "catcher": ["snatcher", "matcher", "latcher", "etcher"],
+    "missiles": ["missals", "mistles", "miss hills", "miss sells", "muscles"],
+    "jets": ["jetty", "jett", "jit"],
+}
 
 
 def postprocess(transcript: str, obj: Command):
@@ -261,9 +272,14 @@ def postprocess(transcript: str, obj: Command):
         target = replace_misheard_colors(target)
 
     if FIX_TARGET_ON:
-        for correct, wrongs in CORRECTION_MAP.items():
+        for correct, wrongs in TARGET_CORRECTION_MAP.items():
             for wrong in wrongs:
-                target = re.sub(rf"\b{wrong}\b", correct, target)
+                target = re.sub(rf"\b{wrong}s?\b", correct, target)
+
+    if FIX_TOOL_ON:
+        for correct, wrongs in TOOL_CORRECTION_MAP.items():
+            for wrong in wrongs:
+                tool = re.sub(rf"\b{wrong}s?\b", correct, tool)
 
     cheese = cheese_heading(transcript)
     heading = heading if cheese is None else cheese
@@ -273,11 +289,12 @@ def postprocess(transcript: str, obj: Command):
 
 
 if __name__ == "__main__":
-
-    transcripts = ["Control to turret, prepare to engage red helicopter at heading four zero six five.",
-                   "Engage the yellow drone with surface-to-air missiles, heading two two three five.",
-                   "Deploy electromagnetic pulse, heading one one zero four turrets on aircraft",
-                   "Control to turrets, heading one one zero two engage aircraft with emp now",]
+    transcripts = [
+        "Control to turret, prepare to engage red helicopter at heading four zero six five.",
+        "Engage the yellow drone with surface-to-air missiles, heading two two three five.",
+        "Deploy electromagnetic pulse, heading one one zero four turrets on aircraft",
+        "Control to turrets, heading one one zero two engage aircraft with emp now",
+    ]
 
     for i in range(0, len(transcripts)):
         heading = cheese_heading(transcripts[i])
