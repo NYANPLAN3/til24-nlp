@@ -46,7 +46,7 @@ DEBUG_PREVIEW = False
 ENABLE_RISKY_CHEESE = True
 
 # Enable/disable individual risky cheeses.
-ENABLE_CHEESE_HEADING = True
+ENABLE_CHEESE_HEADING = os.getenv("ENABLE_CHEESE_HEADING", "1") == "1"
 ENABLE_CHEESE_SKIP_HEADING = os.getenv(
     "ENABLE_CHEESE_SKIP_HEADING", "0") == "1"
 ENABLE_CHEESE_FILTER_TRANSCRIPT = os.getenv(
